@@ -21,5 +21,14 @@ model Movie {
   originalLanguage String
   budget           BigInt
   revenue          BigInt
-  reviewId         String?
+  review           Review?   @relation(fields: [reviewId], references: [id])
+  reviewId         String?   @unique
+}
+
+model Review {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  rating      String
+  movieId     Movie[]
 }

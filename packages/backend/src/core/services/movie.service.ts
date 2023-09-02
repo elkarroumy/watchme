@@ -1,25 +1,18 @@
-import { PrismaClient } from '@prisma/client';
-import { MovieLists } from 'src/common/types/types';
 import { MovieIntegration } from 'src/integrations/movie.integration';
 import { MoviesDto, MoviesParamsDto } from '../repositories/dtos/movie.dto';
+import { MovieRepository } from '../repositories/movie.repository';
 
 export class MovieService {
   public constructor(
-    private readonly movieIntegration: MovieIntegration,
-    private readonly prismaClient: PrismaClient
+    private readonly movieRepository: MovieRepository,
+    private readonly movieIntegration: MovieIntegration
   ) {}
 
   public async showMovies(moviesParams: MoviesParamsDto) {
     return await this.movieIntegration.getMovies(moviesParams);
   }
 
-  public async addMovieToWishList(movies: MoviesDto) {
-    const movie = await this.prismaClient.movie.create({
-      data: {
-        ...movies
-      }
-    });
-
-    return movie;
+  public async addMovieToWishList(movies: MoviesDto): Promise<MoviesDto> {
+    return await this.movieRepository.create(movies);
   }
 }
