@@ -11,3 +11,11 @@ export interface MovieResponse {
   data: any;
   error: { [key: string]: any };
 }
+
+export interface PostgresOptions {
+  host: string;
+  port: number;
+  database: string;
+  user: string;
+  password: string;
+}
