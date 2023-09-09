@@ -1,14 +1,14 @@
 import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
-import { MovieResponse } from 'src/common/types/types';
-import { MoviesDto, MoviesParamsDto } from 'src/core/repositories/dtos/movie.dto';
-import { MovieService } from 'src/core/services/movie.service';
+import { MovieResponse } from '../../common/types/types';
+import { MovieParams, Movie } from '../../core/repositories/dtos/movie.dto';
+import { MovieService } from '../../core/services/movie.service';
 
 @Controller('movies')
 export class MovieController {
   public constructor(private readonly movieService: MovieService) {}
 
   @Get()
-  public async showMovies(@Body() moviesParams: MoviesParamsDto): Promise<MovieResponse> {
+  public async showMovies(@Body() moviesParams: MovieParams): Promise<MovieResponse> {
     try {
       const movie = await this.movieService.showMovies(moviesParams);
 
@@ -38,7 +38,7 @@ export class MovieController {
   }
 
   @Post('/add-to-wish-list')
-  public async addMovieToWishList(@Body() movies: MoviesDto): Promise<MovieResponse> {
+  public async addMovieToWishList(@Body() movies: Movie): Promise<MovieResponse> {
     try {
       const movie = await this.movieService.addMovieToWishList(movies);
 

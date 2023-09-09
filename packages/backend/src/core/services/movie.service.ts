@@ -1,5 +1,6 @@
-import { MovieIntegration } from 'src/integrations/movie.integration';
-import { MoviesDto, MoviesParamsDto } from '../repositories/dtos/movie.dto';
+
+import { MovieIntegration } from '../../integrations/movie.integration';
+import { Movie, MovieParams } from '../repositories/dtos/movie.dto';
 import { MovieRepository } from '../repositories/movie.repository';
 
 export class MovieService {
@@ -8,11 +9,11 @@ export class MovieService {
     private readonly movieIntegration: MovieIntegration
   ) {}
 
-  public async showMovies(moviesParams: MoviesParamsDto) {
+  public async showMovies(moviesParams: MovieParams) {
     return await this.movieIntegration.getMovies(moviesParams);
   }
 
-  public async addMovieToWishList(movies: MoviesDto): Promise<MoviesDto> {
+  public async addMovieToWishList(movies: Movie): Promise<any> {
     return await this.movieRepository.create(movies);
   }
 }

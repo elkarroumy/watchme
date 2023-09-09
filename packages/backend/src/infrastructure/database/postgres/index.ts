@@ -1,6 +1,6 @@
-import { Pool, QueryConfig } from 'pg';
+import { Pool } from 'pg';
 import Statement from './statement';
-import { PostgresOptions } from 'src/common/types/types';
+import { PostgresOptions } from '../../../common/types/types';
 
 const removePadding = (char: string) => {
   const chunks = char.split('\n').map((d) => d.trim());
@@ -22,7 +22,7 @@ export default class Database {
     });
   }
 
-  public sql(strings: TemplateStringsArray, ...keys: any) {
+  public sql(strings: string | TemplateStringsArray, ...keys: any) {
     const chunks = [removePadding(strings[0].trim())];
     for (let i = 1; i <= keys.length; i++) {
       chunks.push('$' + i.toString(), removePadding(strings[i]));

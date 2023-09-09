@@ -1,5 +1,5 @@
-import { MoviesDto } from './dtos/movie.dto';
+import { Movie } from './dtos/movie.dto';
 
 export interface MovieRepository {
-  create(data: MoviesDto): Promise<any[]>;
+  create(data: Movie): Promise<any[]>;
 }

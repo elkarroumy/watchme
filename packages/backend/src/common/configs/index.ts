@@ -1,7 +1,9 @@
+import { POSTGRES } from '../constants/constants';
+
 export const postgresOptions = {
-  host: 'localhost',
-  port: 5432,
-  database: 'postgres',
-  user: 'postgres',
-  password: 'postgres'
+  host: POSTGRES.HOSTNAME,
+  port: POSTGRES.PORT,
+  database: POSTGRES.DATABASE,
+  user: POSTGRES.USERNAME,
+  password: POSTGRES.PASSWORD
 };

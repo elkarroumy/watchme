@@ -1,13 +1,12 @@
-import { PrismaClient } from '@prisma/client';
-import { MoviesDto } from 'src/core/repositories/dtos/movie.dto';
-import { MovieRepository } from 'src/core/repositories/movie.repository';
+import { Movie } from '../../../core/repositories/dtos/movie.dto';
+import { MovieRepository } from '../../../core/repositories/movie.repository';
 import Database from '../postgres';
 
 export default class PostgresRepository implements MovieRepository {
-  public constructor(private readonly postgres: Database) {}
+  public constructor(private readonly database: Database) {}
 
-  public async create(data: MoviesDto): Promise<any> {
-    const query = this.postgres.sql`
+  public async create(data: Movie): Promise<any> {
+    const query = this.database.sql`
       INSERT INTO "Movie" (
           addedAt, 
           title, 

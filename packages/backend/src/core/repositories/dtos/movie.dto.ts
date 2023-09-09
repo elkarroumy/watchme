@@ -1,6 +1,7 @@
-import { MovieLists } from 'src/common/types/types';
+import { MovieLists } from "../../../common/types/types";
 
-export class MoviesDto {
+
+export class Movie {
   addedAt: Date;
   title: string;
   overview: string;
@@ -15,7 +16,7 @@ export class MoviesDto {
   revenue: bigint | number;
 }
 
-export class MoviesParamsDto {
+export class MovieParams {
   lists: MovieLists;
   language: string;
   page: number;
