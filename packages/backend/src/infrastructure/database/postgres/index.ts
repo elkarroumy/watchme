@@ -14,7 +14,7 @@ export default class Database {
     this.pool = new Pool(options);
   }
 
-  public async query(sql: string, values: string[]) {
+  public async query(sql: string, values: any) {
     return this.pool.query(sql, values).catch((error) => {
       error.dbStack = error.stack;
       Error.captureStackTrace(error);
@@ -22,7 +22,7 @@ export default class Database {
     });
   }
 
-  public sql(strings: string | TemplateStringsArray, ...keys: any) {
+  public sql(strings: TemplateStringsArray, ...keys: any) {
     const chunks = [removePadding(strings[0].trim())];
     for (let i = 1; i <= keys.length; i++) {
       chunks.push('$' + i.toString(), removePadding(strings[i]));

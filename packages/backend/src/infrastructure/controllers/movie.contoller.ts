@@ -8,7 +8,7 @@ export class MovieController {
   public constructor(private readonly movieService: MovieService) {}
 
   @Get()
-  public async showMovies(@Body() moviesParams: MovieParams): Promise<MovieResponse> {
+  public async showMovies(moviesParams: MovieParams): Promise<MovieResponse> {
     try {
       const movie = await this.movieService.showMovies(moviesParams);
 
@@ -37,10 +37,10 @@ export class MovieController {
     }
   }
 
-  @Post('/add-to-wish-list')
-  public async addMovieToWishList(@Body() movies: Movie): Promise<MovieResponse> {
+  @Post('/add-to-watch-list')
+  public async addMovieToWatchList(@Body() movies: Movie): Promise<MovieResponse> {
     try {
-      const movie = await this.movieService.addMovieToWishList(movies);
+      const movie = await this.movieService.addMovieToWatchList(movies);
 
       if (!movie) {
         return {
@@ -53,7 +53,7 @@ export class MovieController {
 
       return {
         status: 201,
-        message: 'Movie successfully added to wishlist',
+        message: 'Movie successfully added to watchlist',
         data: movie,
         error: null
       };

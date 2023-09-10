@@ -5,36 +5,16 @@ import Database from '../postgres';
 export default class PostgresRepository implements MovieRepository {
   public constructor(private readonly database: Database) {}
 
-  public async create(data: Movie): Promise<any> {
-    const query = this.database.sql`
-      INSERT INTO "Movie" (
-          addedAt, 
-          title, 
-          overview, 
-          releaseDate, 
-          time,
-          country,
-          authors, 
-          genre, 
-          ageRate, 
-          originalLanguage, 
-          budget, 
-          revenue
-      ) VALUES (
-          ${data.addedAt}, 
-          ${data.title}, 
-          ${data.overview}, 
-          ${data.releaseDate}, 
-          ${data.time},
-          ${data.country},
-          ${data.authors},
-          ${data.genre},
-          ${data.ageRate},
-          ${data.originalLanguage},
-          ${data.budget},
-          ${data.revenue}
-        )
-    `;
-    return await query.rows();
+  public async addMovie(data: Movie) {
+    const query = await this.database.query(
+      `     INSERT INTO Movie (
+                id, added_at, title, overview, release_date, time,
+                country, authors, genre, age_rate,
+                original_language, budget, revenue, review_id
+              )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+      Object.values(data)
+    );
+    return query.rows[0];
   }
 }

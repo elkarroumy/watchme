@@ -9,11 +9,28 @@ export class MovieService {
     private readonly movieIntegration: MovieIntegration
   ) {}
 
-  public async showMovies(moviesParams: MovieParams) {
-    return await this.movieIntegration.getMovies(moviesParams);
+  public async showMovies(movieParams: MovieParams) {
+    return await this.movieIntegration.getMovies(movieParams);
   }
 
-  public async addMovieToWishList(movies: Movie): Promise<any> {
-    return await this.movieRepository.create(movies);
+  public async addMovieToWatchList(movies: Movie): Promise<any> {
+    return await this.movieRepository.addMovie(movies);
+
+
   }
+
+  public async deleteMovieFromWatchList() {}
+
+  // title, description, genres, authors, runtime, score
+  public async filterMovies() {}
+
+  public async getMostPopularMovies() {}
+
+  public async getFavoriteMovies() {}
+
+  public async recommedSimilarMoviesFromWatchList() {}
+
+  public async getUpcomingReleases() {}
+
+  
 }

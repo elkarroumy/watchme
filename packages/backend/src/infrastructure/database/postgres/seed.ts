@@ -8,7 +8,7 @@ import { Logger } from '@nestjs/common';
 
 const db = new Database(postgresOptions);
 
-const movieModel = {
+const movie = {
   id: faker.string.uuid(),
   addedAt: faker.date.anytime(),
   title: faker.word.noun(),
@@ -25,31 +25,14 @@ const movieModel = {
   reviewId: faker.number.int({ min: 1, max: 100 })
 };
 
+const values = Object.values(movie);
+
 const output = './seed.csv';
 const stream = createWriteStream(output);
 
-const writeToCsvFile = async () => {
-  let rows = argv['rows'] || 10;
-
+const writeToCsvFile = async (rows: number) => {
   for (let index = 0; index < rows; index++) {
-    stream.write(
-      `          
-          ${movieModel.id},
-          ${movieModel.addedAt},
-          ${movieModel.title},
-          ${movieModel.overview},
-          ${movieModel.releaseDate},
-          ${movieModel.time},
-          ${movieModel.country},
-          ${movieModel.authors},
-          ${movieModel.genre},
-          ${movieModel.ageRate}
-          ${movieModel.originalLanguage},
-          ${movieModel.budget}, 
-          ${movieModel.revenue},
-          ${movieModel.reviewId}`,
-      'utf-8'
-    );
+    stream.write(`${values.join(', ')}\n`, 'utf-8');
   }
   stream.end();
 };
@@ -67,31 +50,17 @@ const insertFromCsv = async () => {
     })
     .on('end', async () => {
       try {
-        const sql = db.sql`
-              INSERT INTO Movie (
+        await db.query(
+          `     INSERT INTO Movie (
                 id, added_at, title, overview, release_date, time,
                 country, authors, genre, age_rate,
                 original_language, budget, revenue, review_id
               )
-              VALUES (
-          ${movieModel.id},
-          ${movieModel.addedAt},
-          ${movieModel.title},
-          ${movieModel.overview},
-          ${movieModel.releaseDate},
-          ${movieModel.time},
-          ${movieModel.country},
-          ${movieModel.authors},
-          ${movieModel.genre},
-          ${movieModel.ageRate},
-          ${movieModel.originalLanguage},
-          ${movieModel.budget},
-          ${movieModel.revenue},
-          ${movieModel.reviewId}
-        )`;
+              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
+          values
+        );
 
-        await sql.rows();
-        Logger.log('SQL seed completed!')
+        Logger.log('SQL seed completed!');
       } catch (error) {
         Logger.error(error);
       }
@@ -99,7 +68,9 @@ const insertFromCsv = async () => {
 };
 
 const seed = async () => {
-  await writeToCsvFile();
+  const rows = argv['rows'] || 10;
+
+  await writeToCsvFile(rows);
   const stream = createReadStream(output);
   stream.pipe(await insertFromCsv());
 };
