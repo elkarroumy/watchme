@@ -11,7 +11,7 @@ export default class Statement {
     this.keys = keys;
   }
 
-  public async rows(params = {}) {
+  public async rows(params = {}): Promise<string[]> {
     const names = Object.getOwnPropertyNames(params);
     const args = [];
     for (const key of this.keys) {
@@ -22,13 +22,13 @@ export default class Statement {
     return rows;
   }
 
-  public async row(params = {}) {
+  public async row(params = {}): Promise<string> {
     const rows = await this.rows(params);
     if (rows.length < 1) return null;
     return rows[0];
   }
 
-  public async scalar(params = {}) {
+  public async scalar(params = {}): Promise<string> {
     const row = await this.row(params);
     const values = Object.values(row);
     return values[0];

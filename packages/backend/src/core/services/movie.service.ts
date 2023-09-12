@@ -1,36 +1,60 @@
-
+import { REDIS, TMDB } from '../../common/constants/constants';
 import { MovieIntegration } from '../../integrations/movie.integration';
-import { Movie, MovieParams } from '../repositories/dtos/movie.dto';
-import { MovieRepository } from '../repositories/movie.repository';
+import {
+  Movie,
+  ShowMovieParams,
+  SearchMovieParams,
+  MovieParams
+} from '../repositories/dtos/movie.dto';
+import { PostgresRepository } from '../repositories/postgres.repository';
+import { RedisRepository } from '../repositories/redis.repository';
 
 export class MovieService {
   public constructor(
-    private readonly movieRepository: MovieRepository,
-    private readonly movieIntegration: MovieIntegration
+    private readonly postgresRepository: PostgresRepository,
+    private readonly movieIntegration: MovieIntegration,
+    private readonly redisRepository: RedisRepository
   ) {}
 
-  public async showMovies(movieParams: MovieParams) {
-    return await this.movieIntegration.getMovies(movieParams);
+  public async showMovies(params: ShowMovieParams) {
+    return await this.movieIntegration.getMovies(params);
   }
 
-  public async addMovieToWatchList(movies: Movie): Promise<any> {
-    return await this.movieRepository.addMovie(movies);
-
-
+  public async addMovieToWatchList(movie: Movie) {
+    const addedMovie = await this.postgresRepository.addMovie(movie);
+    if (addedMovie) {
+      this.redisRepository.saveMovie(TMDB.TYPE.MOVIE, JSON.stringify(movie), REDIS.EXPIRE);
+    }
+    return addedMovie;
   }
 
-  public async deleteMovieFromWatchList() {}
+  public async showWatchList() {
+    const cache = this.redisRepository.getMovie(TMDB.TYPE.MOVIE);
+    if (cache) {
+      return JSON.parse(cache);
+    }
+    return await this.postgresRepository.getWatchList();
+  }
 
-  // title, description, genres, authors, runtime, score
-  public async filterMovies() {}
+  public async deleteMovieFromWatchList(id: number) {
+    return await this.postgresRepository.deleteMovie(id);
+  }
 
-  public async getMostPopularMovies() {}
+  public async searchMovie(params: SearchMovieParams) {
+    return await this.movieIntegration.searchMovies(params);
+  }
 
-  public async getFavoriteMovies() {}
+  public async showMostPopularMovies(params: MovieParams) {
+    return await this.movieIntegration.getMostPopularMovies(params);
+  }
+
+  public async showTopRatedMovies(params: MovieParams) {
+    return await this.movieIntegration.getTopRatedMovies(params);
+  }
+
+  public async showUpcomingReleases(params: MovieParams) {
+    return await this.movieIntegration.getUpcomingReleases(params);
+  }
 
   public async recommedSimilarMoviesFromWatchList() {}
-
-  public async getUpcomingReleases() {}
-
-  
 }

@@ -22,7 +22,7 @@ export default class Database {
     });
   }
 
-  public sql(strings: TemplateStringsArray, ...keys: any) {
+  public sql(strings: TemplateStringsArray, ...keys: any): Statement {
     const chunks = [removePadding(strings[0].trim())];
     for (let i = 1; i <= keys.length; i++) {
       chunks.push('$' + i.toString(), removePadding(strings[i]));

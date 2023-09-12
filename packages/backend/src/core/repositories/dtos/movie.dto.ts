@@ -1,5 +1,4 @@
-import { MovieLists } from "../../../common/types/types";
-
+import { MovieLists } from '../../../common/types/types';
 
 export class Movie {
   addedAt: Date;
@@ -16,8 +15,24 @@ export class Movie {
   revenue: bigint | number;
 }
 
-export class MovieParams {
+export class ShowMovieParams {
   lists: MovieLists;
   language: string;
   page: number;
+}
+
+export class SearchMovieParams {
+  title: string;
+  language: string;
+  includeAdult: boolean;
+  primaryReleaseYear: string;
+  page: number;
+  region: string;
+  year: string;
+}
+
+export class MovieParams {
+  language: string;
+  page: number;
+  region: string;
 }
