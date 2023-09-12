@@ -56,5 +56,12 @@ export class MovieService {
     return await this.movieIntegration.getUpcomingReleases(params);
   }
 
-  public async recommedSimilarMoviesFromWatchList() {}
+  public async recommedSimilarMovies() {
+    const movie = await this.postgresRepository.getMovieIdAndLanguage();
+    if (movie) {
+      const similarMovie = await this.movieIntegration.getSimilarMovieById(movie.id, movie.language, 1);
+      this.redisRepository.saveMovie(TMDB.TYPE.SIMILAR, JSON.stringify(similarMovie), REDIS.EXPIRE);
+    }
+    return this.redisRepository.getMovie(TMDB.TYPE.SIMILAR);
+  }
 }

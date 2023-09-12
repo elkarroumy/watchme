@@ -7,7 +7,8 @@ export default class Postgres implements PostgresRepository {
 
   public async addMovie(data: Movie): Promise<string> {
     const query = await this.database.query(
-      ` INSERT INTO Movie (
+      ` 
+        INSERT INTO Movie (
               id, added_at, title, overview, release_date, time,
               country, authors, genre, age_rate,
               original_language, budget, revenue, review_id
@@ -25,6 +26,14 @@ export default class Postgres implements PostgresRepository {
 
   public async getWatchList(): Promise<string[]> {
     const query = this.database.sql`SELECT * FROM Movie`;
+    return await query.rows();
+  }
+
+  public async getMovieIdAndLanguage() {
+    const query = this.database.sql`
+        SELECT id, original_language
+        FROM Movie
+    `;
     return await query.rows();
   }
 }

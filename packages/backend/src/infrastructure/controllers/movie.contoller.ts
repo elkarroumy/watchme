@@ -1,6 +1,6 @@
 import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
 import { MovieResponse } from '../../common/types/types';
-import { MovieParams, Movie } from '../../core/repositories/dtos/movie.dto';
+import { MovieParams, Movie, ShowMovieParams } from '../../core/repositories/dtos/movie.dto';
 import { MovieService } from '../../core/services/movie.service';
 
 @Controller('movies')
@@ -8,9 +8,9 @@ export class MovieController {
   public constructor(private readonly movieService: MovieService) {}
 
   @Get()
-  public async showMovies(moviesParams: MovieParams): Promise<MovieResponse> {
+  public async showMovies(params: ShowMovieParams): Promise<MovieResponse> {
     try {
-      const movie = await this.movieService.showMovies(moviesParams);
+      const movie = await this.movieService.showMovies(params);
 
       if (!movie) {
         return {

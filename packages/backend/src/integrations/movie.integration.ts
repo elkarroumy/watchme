@@ -83,4 +83,18 @@ export class MovieIntegration {
     );
     return { body, statusCode };
   }
+
+  public async getSimilarMovieById(id: string, language = 'en-US', page: number) {
+    const { body, statusCode } = await request(
+      `${TMDB.URL}/${TMDB.TYPE.MOVIE}/${id}/similar?language=${language}&page=${page}`,
+      {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${TMDB.ACCESS_TOKEN}`
+        }
+      }
+    );
+    return { body, statusCode };
+  }
 }
