@@ -1,17 +1,21 @@
-import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Post, Query } from '@nestjs/common';
 import { MovieResponse } from '../../common/types/types';
-import { MovieParams, Movie, ShowMovieParams } from '../../core/repositories/dtos/movie.dto';
+import { Movie, ShowMovieParams } from '../../core/repositories/dtos/movie.dto';
 import { MovieService } from '../../core/services/movie.service';
+import { AppLogger } from '../../common/logger';
 
 @Controller('movies')
 export class MovieController {
-  public constructor(private readonly movieService: MovieService) {}
+  public constructor(
+    private readonly movieService: MovieService,
+    private readonly logger: AppLogger
+  ) {}
 
   @Get()
-  public async showMovies(params: ShowMovieParams): Promise<MovieResponse> {
+  public async showMovies(@Query() params: ShowMovieParams): Promise<MovieResponse> {
     try {
+      this.logger.log(`${this.showMovies.name} was called`);
       const movie = await this.movieService.showMovies(params);
-
       if (!movie) {
         return {
           status: 404,
@@ -20,7 +24,6 @@ export class MovieController {
           error: NotFoundException
         };
       }
-
       return {
         status: movie.statusCode,
         message: 'List of movies successfully obtained',
@@ -28,6 +31,7 @@ export class MovieController {
         error: null
       };
     } catch (error) {
+      this.logger.error(error);
       return {
         status: 505,
         message: 'Something went wrong, please, try again',
@@ -40,8 +44,8 @@ export class MovieController {
   @Post('/add-to-watch-list')
   public async addMovieToWatchList(@Body() movies: Movie): Promise<MovieResponse> {
     try {
+      this.logger.log(`${this.showMovies.name} was called`);
       const movie = await this.movieService.addMovieToWatchList(movies);
-
       if (!movie) {
         return {
           status: 404,
@@ -50,7 +54,6 @@ export class MovieController {
           error: NotFoundException
         };
       }
-
       return {
         status: 201,
         message: 'Movie successfully added to watchlist',

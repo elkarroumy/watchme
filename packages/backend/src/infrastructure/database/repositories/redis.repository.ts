@@ -1,14 +1,16 @@
-import { RedisRepository } from '../../../core/repositories/redis.repository';
-import { RedisCache } from '../redis';
+import { Injectable } from '@nestjs/common';
+import { Redis } from '../../../core/repositories/redis.repository';
+import { RedisStorage } from '../redis/redis.storage';
 
-export default class Redis implements RedisRepository {
-  public constructor(private readonly redisCache: RedisCache) {}
+@Injectable()
+export default class RedisRepository implements Redis {
+  public constructor(private readonly redisStorage: RedisStorage) {}
 
-  public async saveMovie(key: string, data: string, ttl: number) {
-    return await this.redisCache.setData(key, data, ttl);
+  public async set(key: string, data: string, ttl: number) {
+    return await this.redisStorage.set(key, data, ttl);
   }
 
-  public async getMovie(key: string) {
-    return await this.redisCache.getData(key);
+  public async get(key: string) {
+    return await this.redisStorage.get(key);
   }
 }

@@ -1,4 +1,4 @@
-export interface RedisRepository {
-  saveMovie(key: string, data: string, ttl: number);
-  getMovie(key: string);
+export interface Redis {
+  set(key: string, data: string, ttl: number);
+  get(key: string);
 }

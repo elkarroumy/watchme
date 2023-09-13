@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { TMDB } from '../common/constants/constants';
 import {
   ShowMovieParams,
@@ -6,6 +7,10 @@ import {
 } from '../core/repositories/dtos/movie.dto';
 import { request } from 'undici';
 
+
+'/movies/top_rated?language=en-US&page=1'
+
+@Injectable()
 export class MovieIntegration {
   public async getMovies({ lists, language, page }: ShowMovieParams) {
     const { body, statusCode } = await request(

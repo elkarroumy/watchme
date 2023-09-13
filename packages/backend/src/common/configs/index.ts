@@ -1,12 +1,4 @@
-import { POSTGRES, REDIS } from '../constants/constants';
-
-export const postgresOptions = {
-  host: POSTGRES.HOSTNAME,
-  port: POSTGRES.PORT,
-  database: POSTGRES.DATABASE,
-  user: POSTGRES.USERNAME,
-  password: POSTGRES.PASSWORD
-};
+import { REDIS } from '../constants/constants';
 
 export const redisOptions = {
   host: REDIS.HOST,

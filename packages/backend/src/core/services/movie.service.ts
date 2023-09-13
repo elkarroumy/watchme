@@ -6,38 +6,41 @@ import {
   SearchMovieParams,
   MovieParams
 } from '../repositories/dtos/movie.dto';
-import { PostgresRepository } from '../repositories/postgres.repository';
-import { RedisRepository } from '../repositories/redis.repository';
+import PrismaRepository from '../../infrastructure/database/repositories/prisma.repository';
+import RedisRepository from '../../infrastructure/database/repositories/redis.repository';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class MovieService {
   public constructor(
-    private readonly postgresRepository: PostgresRepository,
-    private readonly movieIntegration: MovieIntegration,
-    private readonly redisRepository: RedisRepository
+    private readonly prismaRepository: PrismaRepository,
+    private readonly redisRepository: RedisRepository,
+    private readonly movieIntegration: MovieIntegration
   ) {}
 
   public async showMovies(params: ShowMovieParams) {
+    console.log(await this.prismaRepository.getMovieIdAndLanguage());
     return await this.movieIntegration.getMovies(params);
   }
 
   public async addMovieToWatchList(movie: Movie) {
-    const addedMovie = await this.postgresRepository.addMovie(movie);
+    const addedMovie = await this.prismaRepository.addMovie(movie);
     if (addedMovie) {
-      this.redisRepository.saveMovie(TMDB.TYPE.MOVIE, JSON.stringify(movie), REDIS.EXPIRE);
+      this.redisRepository.set(TMDB.TYPE.MOVIE, JSON.stringify(movie), REDIS.EXPIRE);
     }
     return addedMovie;
   }
 
   public async showWatchList() {
-    const cache = this.redisRepository.getMovie(TMDB.TYPE.MOVIE);
+    const cache = this.redisRepository.get(TMDB.TYPE.MOVIE);
     if (cache) {
-      return JSON.parse(cache);
+      return JSON.parse(await cache);
     }
-    return await this.postgresRepository.getWatchList();
+    return await this.prismaRepository.getWatchList();
   }
 
-  public async deleteMovieFromWatchList(id: number) {
-    return await this.postgresRepository.deleteMovie(id);
+  public async deleteMovieFromWatchList(id: string) {
+    return await this.prismaRepository.deleteMovie(id);
   }
 
   public async searchMovie(params: SearchMovieParams) {
@@ -57,11 +60,11 @@ export class MovieService {
   }
 
   public async recommedSimilarMovies() {
-    const movie = await this.postgresRepository.getMovieIdAndLanguage();
+    const movie = await this.prismaRepository.getMovieIdAndLanguage();
     if (movie) {
-      const similarMovie = await this.movieIntegration.getSimilarMovieById(movie.id, movie.language, 1);
-      this.redisRepository.saveMovie(TMDB.TYPE.SIMILAR, JSON.stringify(similarMovie), REDIS.EXPIRE);
+      const { body, statusCode } = await this.movieIntegration.getSimilarMovieById(movie);
+      this.redisRepository.set(TMDB.TYPE.SIMILAR, JSON.stringify(similarMovie), REDIS.EXPIRE);
     }
-    return this.redisRepository.getMovie(TMDB.TYPE.SIMILAR);
+    return this.redisRepository.get(TMDB.TYPE.SIMILAR);
   }
 }

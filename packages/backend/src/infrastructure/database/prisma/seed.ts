@@ -1,12 +1,10 @@
 import { createReadStream, createWriteStream } from 'fs';
 import { faker } from '@faker-js/faker';
-import { postgresOptions } from '../../../common/configs';
-import { argv } from 'process';
 import { parse } from 'csv';
-import Database from './index';
 import { Logger } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 
-const db = new Database(postgresOptions);
+const prisma = new PrismaClient();
 
 const movie = {
   id: faker.string.uuid(),
@@ -21,8 +19,7 @@ const movie = {
   ageRate: faker.number.int({ min: 1, max: 1000000 }),
   originalLanguage: faker.lorem.word(),
   budget: faker.number.bigInt(),
-  revenue: faker.number.bigInt(),
-  reviewId: faker.number.int({ min: 1, max: 100 })
+  revenue: faker.number.bigInt()
 };
 
 const values = Object.values(movie);
@@ -30,8 +27,8 @@ const values = Object.values(movie);
 const output = './seed.csv';
 const stream = createWriteStream(output);
 
-const writeToCsvFile = async (rows: number) => {
-  for (let index = 0; index < rows; index++) {
+const writeToCsvFile = async () => {
+  for (let index = 0; index < 1; index++) {
     stream.write(`${values.join(', ')}\n`, 'utf-8');
   }
   stream.end();
@@ -48,29 +45,22 @@ const insertFromCsv = async () => {
     .on('data', (data) => {
       csvData.push(data);
     })
-    .on('end', async () => {
-      try {
-        await db.query(
-          `     INSERT INTO Movie (
-                id, added_at, title, overview, release_date, time,
-                country, authors, genre, age_rate,
-                original_language, budget, revenue, review_id
-              )
-              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
-          values
-        );
-
-        Logger.log('SQL seed completed!');
-      } catch (error) {
-        Logger.error(error);
-      }
+    .on('end', () => {
+      prisma.movieWatchList
+        .create({
+          data: movie
+        })
+        .then(() => {
+          Logger.log('[SEED] Successfully created movie records');
+        })
+        .catch((error) => {
+          Logger.log('[SEED] Failed to create movie records', error);
+        });
     });
 };
 
 const seed = async () => {
-  const rows = argv['rows'] || 10;
-
-  await writeToCsvFile(rows);
+  await writeToCsvFile();
   const stream = createReadStream(output);
   stream.pipe(await insertFromCsv());
 };
