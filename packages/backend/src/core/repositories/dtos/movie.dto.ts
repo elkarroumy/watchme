@@ -5,7 +5,7 @@ export class Movie {
   title: string;
   overview: string;
   releaseDate: Date;
-  time: number;
+  runtime: number;
   country: string;
   authors: string;
   genre: string;

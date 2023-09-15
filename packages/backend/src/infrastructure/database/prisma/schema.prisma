@@ -13,7 +13,7 @@ model MovieWatchList {
   title            String
   overview         String
   releaseDate      DateTime
-  time             Int
+  runtime             Int
   country          String
   authors          String
   genre            String

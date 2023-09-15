@@ -19,7 +19,6 @@ export class MovieService {
   ) {}
 
   public async showMovies(params: ShowMovieParams) {
-    console.log(await this.prismaRepository.getMovieIdAndLanguage());
     return await this.movieIntegration.getMovies(params);
   }
 
@@ -32,9 +31,9 @@ export class MovieService {
   }
 
   public async showWatchList() {
-    const cache = this.redisRepository.get(TMDB.TYPE.MOVIE);
+    const cache = await this.redisRepository.get(TMDB.TYPE.MOVIE);
     if (cache) {
-      return JSON.parse(await cache);
+      return JSON.parse(cache);
     }
     return await this.prismaRepository.getWatchList();
   }
@@ -57,14 +56,5 @@ export class MovieService {
 
   public async showUpcomingReleases(params: MovieParams) {
     return await this.movieIntegration.getUpcomingReleases(params);
-  }
-
-  public async recommedSimilarMovies() {
-    const movie = await this.prismaRepository.getMovieIdAndLanguage();
-    if (movie) {
-      const { body, statusCode } = await this.movieIntegration.getSimilarMovieById(movie);
-      this.redisRepository.set(TMDB.TYPE.SIMILAR, JSON.stringify(similarMovie), REDIS.EXPIRE);
-    }
-    return this.redisRepository.get(TMDB.TYPE.SIMILAR);
   }
 }

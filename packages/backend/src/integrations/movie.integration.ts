@@ -89,7 +89,7 @@ export class MovieIntegration {
     return { body, statusCode };
   }
 
-  public async getSimilarMovieById(id: string, language = 'en-US', page: number) {
+  public async getSimilarMovieById(id: string, language = 'en-US', page?: number) {
     const { body, statusCode } = await request(
       `${TMDB.URL}/${TMDB.TYPE.MOVIE}/${id}/similar?language=${language}&page=${page}`,
       {
