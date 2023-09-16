@@ -6,7 +6,7 @@ import RedisRepository from './database/repositories/redis.repository';
 import { RedisStorage } from './database/redis/redis.storage';
 import { AppLogger } from '../common/logger';
 import { PrismaClient } from '@prisma/client';
-import PrismaRepository from './database/repositories/prisma.repository';
+import PrismaRepository from './database/repositories/movie.repository';
 
 @Module({
   imports: [],

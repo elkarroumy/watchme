@@ -1,11 +1,11 @@
 -- CreateTable
-CREATE TABLE "MovieWatchList" (
+CREATE TABLE "Movie" (
     "id" TEXT NOT NULL,
     "addedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "title" TEXT NOT NULL,
     "overview" TEXT NOT NULL,
     "releaseDate" TIMESTAMP(3) NOT NULL,
-    "time" INTEGER NOT NULL,
+    "runtime" INTEGER NOT NULL,
     "country" TEXT NOT NULL,
     "authors" TEXT NOT NULL,
     "genre" TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE "MovieWatchList" (
     "revenue" BIGINT NOT NULL,
     "reviewId" TEXT,
 
-    CONSTRAINT "MovieWatchList_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Movie_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -29,7 +29,7 @@ CREATE TABLE "Review" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "MovieWatchList_reviewId_key" ON "MovieWatchList"("reviewId");
+CREATE UNIQUE INDEX "Movie_reviewId_key" ON "Movie"("reviewId");
 
 -- AddForeignKey
-ALTER TABLE "MovieWatchList" ADD CONSTRAINT "MovieWatchList_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Movie" ADD CONSTRAINT "Movie_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE SET NULL ON UPDATE CASCADE;

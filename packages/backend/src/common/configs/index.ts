@@ -1,4 +1,4 @@
-import { REDIS } from '../constants/constants';
+import { REDIS } from '../constants';
 
 export const redisOptions = {
   host: REDIS.HOST,

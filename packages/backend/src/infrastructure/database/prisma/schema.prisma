@@ -7,13 +7,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model MovieWatchList {
+model Movie {
   id               String   @id @default(uuid())
   addedAt          DateTime @default(now())
   title            String
   overview         String
   releaseDate      DateTime
-  runtime             Int
+  runtime          Int
   country          String
   authors          String
   genre            String
@@ -26,9 +26,9 @@ model MovieWatchList {
 }
 
 model Review {
-  id          String  @id @default(uuid())
+  id          String           @id @default(uuid())
   name        String
   description String
   rating      String
-  movieId     MovieWatchList[]
+  movieId     Movie[]
 }

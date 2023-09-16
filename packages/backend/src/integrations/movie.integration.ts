@@ -1,18 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { TMDB } from '../common/constants/constants';
-import {
-  ShowMovieParams,
-  SearchMovieParams,
-  MovieParams
-} from '../core/repositories/dtos/movie.dto';
+import { TMDB } from '../common/constants';
+import { ShowMovieQueries, SearchMovieQueries } from '../core/repositories/dtos/movie.dto';
 import { request } from 'undici';
-
-
-'/movies/top_rated?language=en-US&page=1'
 
 @Injectable()
 export class MovieIntegration {
-  public async getMovies({ lists, language, page }: ShowMovieParams) {
+  public async getMovies({ lists, language, page }: ShowMovieQueries) {
     const { body, statusCode } = await request(
       `${TMDB.URL}/${TMDB.TYPE.MOVIE}/${lists}?language=${language}&page=${page}`,
       {
@@ -26,72 +19,16 @@ export class MovieIntegration {
     return { body, statusCode };
   }
 
-  public async searchMovies(params: SearchMovieParams) {
+  public async searchMovies(queries: SearchMovieQueries) {
     const { body, statusCode } = await request(
       `${TMDB.URL}/search/${TMDB.TYPE.MOVIE}
-      ?query=${params.title}
-      &include_adult=${params.includeAdult}
-      &language=${params.language}
-      &page=${params.page}
-      &region=${params.region}
-      &primary_release_year=${params.primaryReleaseYear}
-      &year=${params.year}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${TMDB.ACCESS_TOKEN}`
-        }
-      }
-    );
-    return { body, statusCode };
-  }
-
-  public async getMostPopularMovies({ language, page, region }: MovieParams) {
-    const { body, statusCode } = await request(
-      `${TMDB.URL}/${TMDB.TYPE.MOVIE}/popular?language=${language}&page=${page}&region=${region}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${TMDB.ACCESS_TOKEN}`
-        }
-      }
-    );
-    return { body, statusCode };
-  }
-
-  public async getTopRatedMovies({ language, page, region }: MovieParams) {
-    const { body, statusCode } = await request(
-      `${TMDB.URL}/${TMDB.TYPE.MOVIE}/top_rated?language=${language}&page=${page}&region=${region}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${TMDB.ACCESS_TOKEN}`
-        }
-      }
-    );
-    return { body, statusCode };
-  }
-
-  public async getUpcomingReleases({ language, page, region }: MovieParams) {
-    const { body, statusCode } = await request(
-      `${TMDB.URL}/${TMDB.TYPE.MOVIE}/upcoming?language=${language}&page=${page}&region=${region}`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${TMDB.ACCESS_TOKEN}`
-        }
-      }
-    );
-    return { body, statusCode };
-  }
-
-  public async getSimilarMovieById(id: string, language = 'en-US', page?: number) {
-    const { body, statusCode } = await request(
-      `${TMDB.URL}/${TMDB.TYPE.MOVIE}/${id}/similar?language=${language}&page=${page}`,
+      ?query=${queries.title}
+      &include_adult=${queries.includeAdult}
+      &language=${queries.language}
+      &page=${queries.page}
+      &region=${queries.region}
+      &primary_release_year=${queries.primaryReleaseYear}
+      &year=${queries.year}`,
       {
         method: 'GET',
         headers: {

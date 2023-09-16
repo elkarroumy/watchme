@@ -3,7 +3,7 @@ dotenv.config();
 
 export const TMDB = {
   ACCESS_TOKEN: process.env.TMDB_ACCESS_TOKEN,
-  URL: process.env.TMDB_URL,
+  URL: process.env.Tasd,
   TYPE: {
     MOVIE: 'movie',
     SIMILAR: 'similar'

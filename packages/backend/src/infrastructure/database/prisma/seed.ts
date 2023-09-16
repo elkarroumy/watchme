@@ -12,7 +12,7 @@ const movie = {
   title: faker.word.noun(),
   overview: faker.lorem.sentence(3),
   releaseDate: faker.date.anytime(),
-  time: faker.number.float({ min: 1 }),
+  runtime: faker.number.float({ min: 1 }),
   country: faker.location.country(),
   authors: faker.person.fullName(),
   genre: faker.lorem.word(),
@@ -46,7 +46,7 @@ const insertFromCsv = async () => {
       csvData.push(data);
     })
     .on('end', () => {
-      prisma.movieWatchList
+      prisma.movie
         .create({
           data: movie
         })

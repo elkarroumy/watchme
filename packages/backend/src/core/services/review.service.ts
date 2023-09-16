@@ -1,20 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import PrismaRepository from '../../infrastructure/database/repositories/prisma.repository';
 import { Review } from '../repositories/dtos/review.dto';
+import ReviewRepository from '../../infrastructure/database/repositories/review.repository';
 
 @Injectable()
 export class ReviewService {
-  public constructor(private readonly prismaRepository: PrismaRepository) {}
+  public constructor(private readonly reviewRepository: ReviewRepository) {}
 
   public async createReview(review: Review) {
-    return await this.prismaRepository.createReview(review);
+    return await this.reviewRepository.create(review);
   }
 
   public async showReview() {
-    return await this.prismaRepository.showReview();
+    return await this.reviewRepository.find();
+  }
+
+  public async updateReview(id: string, review: Review) {
+    return await this.reviewRepository.update(id, review);
   }
 
   public async deleteReview(id: string) {
-    return await this.prismaRepository.deleteReview(id);
+    return await this.reviewRepository.delete(id);
   }
 }

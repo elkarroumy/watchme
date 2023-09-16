@@ -1,6 +1,7 @@
 import { MovieLists } from '../../../common/types/types';
 
 export class Movie {
+  id: string;
   addedAt: Date;
   title: string;
   overview: string;
@@ -13,15 +14,16 @@ export class Movie {
   originalLanguage: string;
   budget: bigint | number;
   revenue: bigint | number;
+  reviewId: string;
 }
 
-export class ShowMovieParams {
+export class ShowMovieQueries {
   lists: MovieLists;
   language: string;
   page: number;
 }
 
-export class SearchMovieParams {
+export class SearchMovieQueries {
   title: string;
   language: string;
   includeAdult: boolean;
@@ -29,10 +31,4 @@ export class SearchMovieParams {
   page: number;
   region: string;
   year: string;
-}
-
-export class MovieParams {
-  language: string;
-  page: number;
-  region: string;
 }
