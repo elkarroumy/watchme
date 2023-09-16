@@ -1,24 +1,29 @@
 import { Module } from '@nestjs/common';
-import { MovieService } from '../core/services/movie.service';
-import { MovieController } from './controllers/movie.contoller';
-import { MovieIntegration } from '../integrations/movie.integration';
-import RedisRepository from './database/repositories/redis.repository';
-import { RedisStorage } from './database/redis/redis.storage';
-import { AppLogger } from '../common/logger';
 import { PrismaClient } from '@prisma/client';
-import PrismaRepository from './database/repositories/movie.repository';
+import { AppLogger } from '../common/logger';
+import { MovieService } from '../core/services/movie.service';
+import { MovieIntegration } from '../integrations/movie.integration';
+import { RedisStorage } from './database/redis/redis.storage';
+import MovieRepository from './database/repositories/movie.repository';
+import RedisRepository from './database/repositories/redis.repository';
+import { MovieController } from './controllers/movie.contoller';
+import { ReviewService } from '../core/services/review.service';
+import ReviewRepository from './database/repositories/review.repository';
+import { ReviewController } from './controllers/review.controller';
 
 @Module({
   imports: [],
-  controllers: [MovieController],
+  controllers: [MovieController, ReviewController],
   providers: [
+    AppLogger,
     MovieService,
+    MovieIntegration,
+    MovieRepository,
+    ReviewService,
+    ReviewRepository,
     RedisRepository,
     RedisStorage,
-    MovieIntegration,
-    AppLogger,
-    PrismaClient,
-    PrismaRepository
+    PrismaClient
   ]
 })
 export class AppModule {}

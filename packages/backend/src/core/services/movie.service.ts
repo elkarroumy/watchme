@@ -16,7 +16,7 @@ export class MovieService {
   ) {}
 
   public async showMovies(queries: ShowMovieQueries) {
-    this.logger.log(`${this.showMovies.name} was called in service.`);
+    this.logger.log(`${this.showMovies.name} was called in the service.`);
     const { body, statusCode } = await this.movieIntegration.getMovies(queries);
 
     return {
@@ -26,21 +26,21 @@ export class MovieService {
     };
   }
 
-  public async addMovieToWatchList(movie: Movie) {
-    this.logger.log(`${this.addMovieToWatchList.name} was called in service.`);
-    const addedMovie = await this.prismaRepository.add(movie);
-    if (addedMovie) {
-      this.redisRepository.set(TMDB.TYPE.MOVIE, JSON.stringify(movie), REDIS.EXPIRE);
+  public async addMovieToWatchList(body: Movie) {
+    this.logger.log(`${this.addMovieToWatchList.name} was called in the service.`);
+    const movie = await this.prismaRepository.add(body);
+    if (movie) {
+      this.redisRepository.set(TMDB.TYPE.MOVIE, JSON.stringify(body), REDIS.EXPIRE);
     }
     return {
       status: 201,
-      data: addedMovie,
+      data: movie,
       error: null
     };
   }
 
   public async showWatchList() {
-    this.logger.log(`${this.showWatchList.name} was called in service.`);
+    this.logger.log(`${this.showWatchList.name} was called in the service.`);
     const cache = await this.redisRepository.get(TMDB.TYPE.MOVIE);
     if (cache) {
       return {
@@ -59,7 +59,7 @@ export class MovieService {
   }
 
   public async deleteMovieFromWatchList(id: string) {
-    this.logger.log(`${this.deleteMovieFromWatchList.name} was called in service.`);
+    this.logger.log(`${this.deleteMovieFromWatchList.name} was called in the service.`);
     const deletedMovie = await this.prismaRepository.delete(id);
 
     return {
@@ -70,7 +70,7 @@ export class MovieService {
   }
 
   public async searchMovies(queries: SearchMovieQueries) {
-    this.logger.log(`${this.searchMovies.name} was called in service.`);
+    this.logger.log(`${this.searchMovies.name} was called in the service.`);
     const { body, statusCode } = await this.movieIntegration.searchMovies(queries);
 
     return {
