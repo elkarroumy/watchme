@@ -38,9 +38,12 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Generate prisma client
-        run: cd packages/backend pnpm prisma generate
-      - run: cd ../..
+      - name: Change directory
+        run: cd packages/backend
+      - name: Prisma generate
+        run: pnpm prisma generate
+      - name: Change directory
+        run: cd ../..
       - name: Build
         run: pnpm build
       - name: Setup Pages
