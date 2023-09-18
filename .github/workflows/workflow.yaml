@@ -38,13 +38,7 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Change directory
-        run: cd packages/backend
-      - name: Prisma generate
-        run: pnpm prisma generate
-      - name: Change directory
-        run: cd ../..
-      - name: Build
+      - name: Build a project
         run: pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v3
