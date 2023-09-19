@@ -19,3 +19,8 @@ export interface PostgresOptions {
   user: string;
   password: string;
 }
+
+export type JwtPayload = {
+  sub: string;
+  email: string;
+};

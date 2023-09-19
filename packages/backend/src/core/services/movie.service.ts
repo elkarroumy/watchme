@@ -1,7 +1,7 @@
 import { REDIS, TMDB } from '../../common/constants';
 import { MovieIntegration } from '../../integrations/movie.integration';
 import { Movie, ShowMovieQueries, SearchMovieQueries } from '../repositories/dtos/movie.dto';
-import PrismaRepository from '../../infrastructure/database/repositories/movie.repository';
+import MovieRepository from '../../infrastructure/database/repositories/movie.repository';
 import RedisRepository from '../../infrastructure/database/repositories/redis.repository';
 import { Injectable } from '@nestjs/common';
 import { AppLogger } from '../../common/logger';
@@ -9,7 +9,7 @@ import { AppLogger } from '../../common/logger';
 @Injectable()
 export class MovieService {
   public constructor(
-    private readonly prismaRepository: PrismaRepository,
+    private readonly movieRepository: MovieRepository,
     private readonly redisRepository: RedisRepository,
     private readonly movieIntegration: MovieIntegration,
     private readonly logger: AppLogger
@@ -28,7 +28,7 @@ export class MovieService {
 
   public async addMovieToWatchList(body: Movie) {
     this.logger.log(`${this.addMovieToWatchList.name} was called in the service.`);
-    const movie = await this.prismaRepository.add(body);
+    const movie = await this.movieRepository.add(body);
     if (movie) {
       this.redisRepository.set(TMDB.TYPE.MOVIE, JSON.stringify(body), REDIS.EXPIRE);
     }
@@ -49,7 +49,7 @@ export class MovieService {
         error: null
       };
     }
-    const watchList = await this.prismaRepository.find();
+    const watchList = await this.movieRepository.find();
 
     return {
       status: 200,
@@ -60,7 +60,7 @@ export class MovieService {
 
   public async deleteMovieFromWatchList(id: string) {
     this.logger.log(`${this.deleteMovieFromWatchList.name} was called in the service.`);
-    const deletedMovie = await this.prismaRepository.delete(id);
+    const deletedMovie = await this.movieRepository.delete(id);
 
     return {
       status: 200,

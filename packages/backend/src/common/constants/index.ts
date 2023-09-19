@@ -15,6 +15,8 @@ export const REDIS = {
   PORT: Number(process.env.REDIS_PORT),
   USERNAME: process.env.REDIS_USERNAME,
   PASSWORD: process.env.REDIS_PASSWORD,
+  ACCESS: 'access',
+  REFRESH: 'refresh',
   EXPIRE: 20
 };
 
@@ -23,7 +25,17 @@ export const CORS = {
   METHODS: process.env.CORS_METHODS
 };
 
-
 export const API = {
   GLOBAL_PREFIX: 'api'
-}
+};
+
+export const JWT = {
+  ACCESS_SECRET: process.env.ACCESS_TOKEN_SECRET,
+  REFRESH_SECRET: process.env.REFRESH_TOKEN_SECRET
+};
+
+export const EXCEPTION = {
+  USER_ALREADY_EXISTS: 'User already exists',
+  USER_NOT_FOUND: 'User not found',
+  PASSWORD_INCORRECT: 'Password is incorrect',
+};

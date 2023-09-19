@@ -23,12 +23,27 @@ model Movie {
   revenue          BigInt
   review           Review?  @relation(fields: [reviewId], references: [id])
   reviewId         String?  @unique
+  User             User[]
 }
 
 model Review {
-  id          String           @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String
   rating      String
   movieId     Movie[]
+  userId      User[]
+}
+
+model User {
+  id           String  @id @default(uuid())
+  firstName    String
+  lastName     String
+  email        String  @unique
+  password     String
+  refreshToken String?
+  review       Review? @relation(fields: [reviewId], references: [id])
+  reviewId     String?
+  movie        Movie?  @relation(fields: [movieId], references: [id])
+  movieId      String?
 }

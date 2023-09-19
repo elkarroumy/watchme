@@ -10,9 +10,12 @@ import { MovieController } from './controllers/movie.contoller';
 import { ReviewService } from '../core/services/review.service';
 import ReviewRepository from './database/repositories/review.repository';
 import { ReviewController } from './controllers/review.controller';
+import { JwtModule } from '@nestjs/jwt';
+import { AccessTokenStrategy } from '../core/services/auth/strategies/access-token.strategy';
+import { RefreshTokenStrategy } from '../core/services/auth/strategies/refresh-token.strategy';
 
 @Module({
-  imports: [],
+  imports: [JwtModule.register({})],
   controllers: [MovieController, ReviewController],
   providers: [
     AppLogger,
@@ -23,7 +26,9 @@ import { ReviewController } from './controllers/review.controller';
     ReviewRepository,
     RedisRepository,
     RedisStorage,
-    PrismaClient
+    PrismaClient,
+    AccessTokenStrategy,
+    RefreshTokenStrategy
   ]
 })
 export class AppModule {}
