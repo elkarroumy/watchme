@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import AuthRepository from '../../../infrastructure/database/repositories/auth.repository';
-import { User } from '@prisma/client';
 import { encrypt } from '../../../common/crypto';
 import { JwtService } from '@nestjs/jwt';
 import { JWT, REDIS } from '../../../common/constants';
