@@ -1,10 +1,21 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  UseGuards
+} from '@nestjs/common';
 import { ReviewService } from '../../core/services/review.service';
-import { Review } from '../../core/repositories/dtos/review.dto';
-import { AppLogger } from '../../common/logger';
-import { ServerResponse } from '../../common/types/types';
+import { ReviewDto } from '../../core/entities/dtos/review.dto';
+import { AppLogger } from '../../helpers/logger';
+import { ServerResponse } from '../../common/types';
+import { AccessTokenGuard } from '../../core/services/auth/guards/access-token.guard';
 
-@Controller('review')
+@Controller('reviews')
 export class ReviewController {
   public constructor(
     private readonly reviewService: ReviewService,
@@ -12,7 +23,8 @@ export class ReviewController {
   ) {}
 
   @Post('/create')
-  public async createReview(@Body() body: Review): Promise<ServerResponse> {
+  @UseGuards(AccessTokenGuard)
+  public async createReview(@Body() body: ReviewDto): Promise<ServerResponse> {
     this.logger.log(`${this.createReview.name} was called in the controller.`);
     try {
       const review = await this.reviewService.createReview(body);
@@ -42,10 +54,10 @@ export class ReviewController {
   }
 
   @Get('/get')
-  public async showReview(): Promise<ServerResponse> {
-    this.logger.log(`${this.showReview.name} was called in the controller.`);
+  public async showReviews(): Promise<ServerResponse> {
+    this.logger.log(`${this.showReviews.name} was called in the controller.`);
     try {
-      const review = await this.reviewService.showReview();
+      const review = await this.reviewService.showReviews();
       if (!review) {
         return {
           status: 404,
@@ -72,9 +84,10 @@ export class ReviewController {
   }
 
   @Put('/update/:id')
+  @UseGuards(AccessTokenGuard)
   public async updateReview(
     @Param('id') id: string,
-    @Body() body: Review
+    @Body() body: ReviewDto
   ): Promise<ServerResponse> {
     this.logger.log(`${this.updateReview.name} was called in the controller.`);
     try {
@@ -105,6 +118,7 @@ export class ReviewController {
   }
 
   @Delete('/delete/:id')
+  @UseGuards(AccessTokenGuard)
   public async deleteReview(@Param('id') id: string): Promise<ServerResponse> {
     this.logger.log(`${this.deleteReview.name} was called in the controller.`);
     try {

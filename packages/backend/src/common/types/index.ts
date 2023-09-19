@@ -1,4 +1,4 @@
-export interface MovieLists {
+export interface MovieList {
   now_playing: string;
   popular: string;
   top_rated: string;
@@ -24,3 +24,10 @@ export type JwtPayload = {
   sub: string;
   email: string;
 };
+
+export type Tokens = {
+  access_token: string;
+  refresh_token: string;
+};
+
+

@@ -1,7 +1,6 @@
-import { MovieLists } from '../../../common/types/types';
+import { MovieList } from '../../../common/types';
 
-export class Movie {
-  id: string;
+export class MovieDto {
   addedAt: Date;
   title: string;
   overview: string;
@@ -14,16 +13,15 @@ export class Movie {
   originalLanguage: string;
   budget: bigint | number;
   revenue: bigint | number;
-  reviewId: string;
 }
 
-export class ShowMovieQueries {
-  lists: MovieLists;
+export class ShowMovieQueriesDto {
+  lists: MovieList;
   language: string;
   page: number;
 }
 
-export class SearchMovieQueries {
+export class SearchMovieQueriesDto {
   title: string;
   language: string;
   includeAdult: boolean;

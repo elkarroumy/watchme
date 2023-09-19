@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import AuthRepository from '../../../infrastructure/database/repositories/auth.repository';
-import { encrypt } from '../../../common/crypto';
+import { encrypt, decrypt } from '../../../helpers/crypto';
 import { JwtService } from '@nestjs/jwt';
 import { JWT, REDIS } from '../../../common/constants';
 import RedisRepository from '../../../infrastructure/database/repositories/redis.repository';
+import { Tokens } from '../../../common/types';
 
 @Injectable()
 export class TokenService {
@@ -13,16 +14,16 @@ export class TokenService {
     private readonly jwtService: JwtService
   ) {}
 
-  public async updateRefreshToken(userId: string, token: string): Promise<void> {
+  public async updateRefreshToken(id: string, token: string): Promise<void> {
     const hashedRefreshToken = encrypt(token);
-    await this.authRepository.updateToken(userId, hashedRefreshToken);
+    await this.authRepository.updateToken(id, hashedRefreshToken);
   }
 
-  public async getTokens(userId: string, email: string) {
+  public async getTokens(id: string, email: string): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          sub: userId,
+          sub: id,
           email
         },
         {
@@ -32,7 +33,7 @@ export class TokenService {
       ),
       this.jwtService.signAsync(
         {
-          sub: userId,
+          sub: id,
           email
         },
         {

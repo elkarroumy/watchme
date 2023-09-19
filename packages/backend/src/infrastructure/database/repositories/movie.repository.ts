@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import { Movie } from '../../../core/repositories/dtos/movie.dto';
+import { MovieDto } from '../../../core/entities/dtos/movie.dto';
 import { Injectable } from '@nestjs/common';
-import { Movies } from '../../../core/repositories/movie.repository';
+import { Movie, MovieMethods } from '../../../core/entities/movie.entity';
 
 @Injectable()
-export default class MovieRepository implements Movies {
+export default class MovieRepository implements MovieMethods {
   public constructor(private readonly prisma: PrismaClient) {}
 
-  public async add(data: Movie): Promise<Movie> {
+  public async add(data: MovieDto): Promise<Movie> {
     return await this.prisma.movie.create({ data });
   }
 

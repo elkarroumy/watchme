@@ -1,10 +1,10 @@
 import { REDIS, TMDB } from '../../common/constants';
 import { MovieIntegration } from '../../integrations/movie.integration';
-import { Movie, ShowMovieQueries, SearchMovieQueries } from '../repositories/dtos/movie.dto';
+import { MovieDto, ShowMovieQueriesDto, SearchMovieQueriesDto } from '../entities/dtos/movie.dto';
 import MovieRepository from '../../infrastructure/database/repositories/movie.repository';
 import RedisRepository from '../../infrastructure/database/repositories/redis.repository';
 import { Injectable } from '@nestjs/common';
-import { AppLogger } from '../../common/logger';
+import { AppLogger } from '../../helpers/logger';
 
 @Injectable()
 export class MovieService {
@@ -15,7 +15,7 @@ export class MovieService {
     private readonly logger: AppLogger
   ) {}
 
-  public async showMovies(queries: ShowMovieQueries) {
+  public async showMovies(queries: ShowMovieQueriesDto) {
     this.logger.log(`${this.showMovies.name} was called in the service.`);
     const { body, statusCode } = await this.movieIntegration.getMovies(queries);
 
@@ -26,7 +26,7 @@ export class MovieService {
     };
   }
 
-  public async addMovieToWatchList(body: Movie) {
+  public async addMovieToWatchList(body: MovieDto) {
     this.logger.log(`${this.addMovieToWatchList.name} was called in the service.`);
     const movie = await this.movieRepository.add(body);
     if (movie) {
@@ -69,7 +69,7 @@ export class MovieService {
     };
   }
 
-  public async searchMovies(queries: SearchMovieQueries) {
+  public async searchMovies(queries: SearchMovieQueriesDto) {
     this.logger.log(`${this.searchMovies.name} was called in the service.`);
     const { body, statusCode } = await this.movieIntegration.searchMovies(queries);
 

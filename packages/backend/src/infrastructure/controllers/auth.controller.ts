@@ -1,23 +1,21 @@
-import { Body, Controller, Param, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from '../../core/services/auth/authentication.service';
-import { TokenService } from '../../core/services/auth/token.service';
-import { User } from '../../core/repositories/dtos/auth.dto';
+import { UserDto } from '../../core/entities/dtos/auth.dto';
 import { Request } from 'express';
-import { AppLogger } from '../../common/logger';
-import { ServerResponse } from '../../common/types/types';
+import { AppLogger } from '../../helpers/logger';
+import { ServerResponse } from '../../common/types';
+import { AccessTokenGuard } from '../../core/services/auth/guards/access-token.guard';
+import { RefreshTokenGuard } from '../../core/services/auth/guards/refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
   public constructor(
     private readonly authenticationService: AuthenticationService,
-    private readonly tokenService: TokenService,
     private readonly logger: AppLogger
   ) {}
 
-  // todo: guards
-
   @Post('/signup')
-  public async signUp(@Body() body: User): Promise<ServerResponse> {
+  public async signUp(@Body() body: UserDto): Promise<ServerResponse> {
     this.logger.log(`${this.signUp.name} was called in the controller.`);
     try {
       const tokens = await this.authenticationService.signUp(body);
@@ -39,7 +37,7 @@ export class AuthController {
   }
 
   @Post('/signin')
-  public async signIn(@Body() body: User): Promise<ServerResponse> {
+  public async signIn(@Body() body: UserDto): Promise<ServerResponse> {
     this.logger.log(`${this.signIn.name} was called in the controller.`);
     try {
       const tokens = await this.authenticationService.signIn(body);
@@ -61,14 +59,13 @@ export class AuthController {
   }
 
   @Post('/refresh')
-  public async updateTokens(@Param('id') id: string): Promise<ServerResponse> {
+  @UseGuards(RefreshTokenGuard)
+  public async updateTokens(@Req() req: Request): Promise<ServerResponse> {
     this.logger.log(`${this.updateTokens.name} was called in the controller.`);
     try {
-      const { email } = await this.authenticationService.findUser(id);
-
-      const tokens = await this.tokenService.getTokens(id, email);
-      await this.tokenService.updateRefreshToken(id, tokens.refresh_token);
-
+      const id = req.user['sub'];
+      const refreshToken = req.user['refreshToken'];
+      const tokens = await this.authenticationService.refreshTokens(id, refreshToken);
       return {
         status: 200,
         message: 'Tokens was successfully obtained',
@@ -87,6 +84,7 @@ export class AuthController {
   }
 
   @Post('/logout')
+  @UseGuards(AccessTokenGuard)
   public async logout(@Req() req: Request): Promise<ServerResponse> {
     this.logger.log(`${this.logout.name} was called in the controller.`);
     try {

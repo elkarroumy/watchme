@@ -7,16 +7,17 @@ import {
   Param,
   Post,
   Query,
-  UseFilters
+  UseGuards
 } from '@nestjs/common';
-import { ServerResponse } from '../../common/types/types';
+import { ServerResponse } from '../../common/types';
 import {
-  Movie,
-  SearchMovieQueries,
-  ShowMovieQueries
-} from '../../core/repositories/dtos/movie.dto';
+  MovieDto,
+  SearchMovieQueriesDto,
+  ShowMovieQueriesDto
+} from '../../core/entities/dtos/movie.dto';
 import { MovieService } from '../../core/services/movie.service';
-import { AppLogger } from '../../common/logger';
+import { AppLogger } from '../../helpers/logger';
+import { AccessTokenGuard } from '../../core/services/auth/guards/access-token.guard';
 
 @Controller('movies')
 export class MovieController {
@@ -26,7 +27,7 @@ export class MovieController {
   ) {}
 
   @Get()
-  public async showMovies(@Query() queries: ShowMovieQueries): Promise<ServerResponse> {
+  public async showMovies(@Query() queries: ShowMovieQueriesDto): Promise<ServerResponse> {
     this.logger.log(`${this.showMovies.name} was called in the controller.`);
     try {
       const movie = await this.movieService.showMovies(queries);
@@ -56,7 +57,8 @@ export class MovieController {
   }
 
   @Post('/watch-list/add')
-  public async addMovieToWatchList(@Body() body: Movie): Promise<ServerResponse> {
+  @UseGuards(AccessTokenGuard)
+  public async addMovieToWatchList(@Body() body: MovieDto): Promise<ServerResponse> {
     this.logger.log(`${this.showMovies.name} was called in the controller.`);
     try {
       const movie = await this.movieService.addMovieToWatchList(body);
@@ -85,6 +87,7 @@ export class MovieController {
   }
 
   @Get('/watch-list')
+  @UseGuards(AccessTokenGuard)
   public async showWatchList(): Promise<ServerResponse> {
     this.logger.log(`${this.showWatchList.name} was called in the controller.`);
     try {
@@ -114,6 +117,7 @@ export class MovieController {
   }
 
   @Delete('/watch-list/delete')
+  @UseGuards(AccessTokenGuard)
   public async deleteMovieFromWatchList(@Param('id') id: string): Promise<ServerResponse> {
     this.logger.log(`${this.deleteMovieFromWatchList.name} was called in the controller.`);
     try {
@@ -143,7 +147,7 @@ export class MovieController {
   }
 
   @Get('/search')
-  public async searchMovies(@Query() queries: SearchMovieQueries): Promise<ServerResponse> {
+  public async searchMovies(@Query() queries: SearchMovieQueriesDto): Promise<ServerResponse> {
     this.logger.log(`${this.deleteMovieFromWatchList.name} was called in the controller.`);
     try {
       const movie = await this.movieService.searchMovies(queries);
