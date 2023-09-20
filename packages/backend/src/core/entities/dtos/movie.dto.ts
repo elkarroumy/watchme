@@ -1,18 +1,42 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { MovieList } from '../../../common/types';
 
 export class MovieDto {
+  @ApiProperty()
   addedAt: Date;
+
+  @ApiProperty()
   title: string;
+
+  @ApiProperty()
   overview: string;
+
+  @ApiProperty()
   releaseDate: Date;
+
+  @ApiProperty()
   runtime: number;
+
+  @ApiProperty()
   country: string;
+
+  @ApiProperty()
   authors: string;
+
+  @ApiProperty()
   genre: string;
+
+  @ApiProperty()
   ageRate: number;
+
+  @ApiProperty()
   originalLanguage: string;
-  budget: bigint | number;
-  revenue: bigint | number;
+
+  @ApiProperty()
+  budget: bigint;
+
+  @ApiProperty()
+  revenue: bigint;
 }
 
 export class ShowMovieQueriesDto {

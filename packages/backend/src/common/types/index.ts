@@ -1,3 +1,6 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Movie } from '../../core/entities/movie.entity';
+
 export interface MovieList {
   now_playing: string;
   popular: string;
@@ -5,10 +8,20 @@ export interface MovieList {
   upcoming: string;
 }
 
-export interface ServerResponse {
+export class ServerResponse {
+  @ApiProperty({ example: '201' })
   status: number;
+
+  @ApiProperty({ example: 'Name of movie was successfully obtained' })
   message: string;
+
+  @ApiProperty({ example: { id: 1, title: 'title', description: 'description' } })
   data: any;
+
+  @ApiProperty({
+    description: 'An object containing error details',
+    example: { reason: 'This is a custom error message' }
+  })
   error: { [key: string]: any };
 }
 

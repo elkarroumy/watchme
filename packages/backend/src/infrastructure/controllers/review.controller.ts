@@ -14,7 +14,9 @@ import { ReviewDto } from '../../core/entities/dtos/review.dto';
 import { AppLogger } from '../../helpers/logger';
 import { ServerResponse } from '../../common/types';
 import { JwtAccessGuard } from '../../common/guards/access-token.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Reviews')
 @Controller('reviews')
 export class ReviewController {
   public constructor(
@@ -45,7 +47,7 @@ export class ReviewController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error
@@ -75,7 +77,7 @@ export class ReviewController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error
@@ -109,7 +111,7 @@ export class ReviewController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error
@@ -140,7 +142,7 @@ export class ReviewController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error

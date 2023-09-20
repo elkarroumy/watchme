@@ -6,7 +6,9 @@ import { AppLogger } from '../../helpers/logger';
 import { ServerResponse } from '../../common/types';
 import { JwtAccessGuard } from '../../common/guards/access-token.guard';
 import { JwtRefreshGuard } from '../../common/guards/refresh-token.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   public constructor(
@@ -28,7 +30,7 @@ export class AuthController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error
@@ -50,7 +52,7 @@ export class AuthController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error
@@ -75,7 +77,7 @@ export class AuthController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error
@@ -98,7 +100,7 @@ export class AuthController {
     } catch (error) {
       this.logger.error(error);
       return {
-        status: 505,
+        status: 500,
         message: 'Something went wrong, please, try again',
         data: null,
         error
