@@ -15,6 +15,7 @@ export const REDIS = {
   PORT: Number(process.env.REDIS_PORT),
   USERNAME: process.env.REDIS_USERNAME,
   PASSWORD: process.env.REDIS_PASSWORD,
+  DATABASE: Number(process.env.REDIS_DATABASE),
   ACCESS: 'access',
   REFRESH: 'refresh',
   EXPIRE: 20
@@ -25,7 +26,7 @@ export const CORS = {
   METHODS: process.env.CORS_METHODS
 };
 
-export const API = {
+export const APP = {
   GLOBAL_PREFIX: 'api'
 };
 
@@ -40,7 +41,3 @@ export const EXCEPTION = {
   PASSWORD_INCORRECT: 'Password is incorrect',
   ACCESS_DENIED: 'Access denied'
 };
-
-export const CRYPTO = {
-  ALGORITHM: process.env.CRYTO_ALGORITHM
-}

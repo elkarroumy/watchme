@@ -1,20 +1,11 @@
-import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
-import { CRYPTO } from '../../common/constants';
+import { compare, hash } from 'bcrypt';
 
-const algorithm = CRYPTO.ALGORITHM;
-const key = randomBytes(32);
-const iv = randomBytes(16);
+const salt = 10;
 
-export const encrypt = (text: string): string => {
-  const cipher = createCipheriv(algorithm, key, iv);
-  let encrypted = cipher.update(text, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  return iv.toString('hex') + encrypted;
+export const encrypt = async (text: string): Promise<string> => {
+  return await hash(text, salt);
 };
 
-export const decrypt = (encryptedText: string): string => {
-  const decipher = createDecipheriv(algorithm, key, iv);
-  let decrypted = decipher.update(encryptedText.slice(32), 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
+export const decrypt = async (encrypted: string, text: string): Promise<boolean> => {
+  return await compare(encrypted, text);
 };

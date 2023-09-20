@@ -17,7 +17,7 @@ import {
 } from '../../core/entities/dtos/movie.dto';
 import { MovieService } from '../../core/services/movie.service';
 import { AppLogger } from '../../helpers/logger';
-import { AccessTokenGuard } from '../../core/services/auth/guards/access-token.guard';
+import { JwtAccessGuard } from '../../common/guards/access-token.guard';
 
 @Controller('movies')
 export class MovieController {
@@ -57,7 +57,7 @@ export class MovieController {
   }
 
   @Post('/watch-list/add')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(JwtAccessGuard)
   public async addMovieToWatchList(@Body() body: MovieDto): Promise<ServerResponse> {
     this.logger.log(`${this.showMovies.name} was called in the controller.`);
     try {
@@ -87,7 +87,7 @@ export class MovieController {
   }
 
   @Get('/watch-list')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(JwtAccessGuard)
   public async showWatchList(): Promise<ServerResponse> {
     this.logger.log(`${this.showWatchList.name} was called in the controller.`);
     try {
@@ -117,7 +117,7 @@ export class MovieController {
   }
 
   @Delete('/watch-list/delete')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(JwtAccessGuard)
   public async deleteMovieFromWatchList(@Param('id') id: string): Promise<ServerResponse> {
     this.logger.log(`${this.deleteMovieFromWatchList.name} was called in the controller.`);
     try {

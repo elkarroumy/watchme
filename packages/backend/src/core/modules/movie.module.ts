@@ -7,6 +7,7 @@ import { MovieController } from '../../infrastructure/controllers/movie.contolle
 import MovieRepository from '../../infrastructure/database/repositories/movie.repository';
 import { MovieIntegration } from '../../integrations/movie.integration';
 import { RedisStorage } from '../../infrastructure/database/redis/redis.storage';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [],
@@ -18,7 +19,8 @@ import { RedisStorage } from '../../infrastructure/database/redis/redis.storage'
     MovieRepository,
     MovieIntegration,
     AppLogger,
-    RedisStorage
+    RedisStorage,
+    JwtService
   ]
 })
 export class MovieModule {}

@@ -13,7 +13,7 @@ import { ReviewService } from '../../core/services/review.service';
 import { ReviewDto } from '../../core/entities/dtos/review.dto';
 import { AppLogger } from '../../helpers/logger';
 import { ServerResponse } from '../../common/types';
-import { AccessTokenGuard } from '../../core/services/auth/guards/access-token.guard';
+import { JwtAccessGuard } from '../../common/guards/access-token.guard';
 
 @Controller('reviews')
 export class ReviewController {
@@ -23,7 +23,7 @@ export class ReviewController {
   ) {}
 
   @Post('/create')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(JwtAccessGuard)
   public async createReview(@Body() body: ReviewDto): Promise<ServerResponse> {
     this.logger.log(`${this.createReview.name} was called in the controller.`);
     try {
@@ -84,7 +84,7 @@ export class ReviewController {
   }
 
   @Put('/update/:id')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(JwtAccessGuard)
   public async updateReview(
     @Param('id') id: string,
     @Body() body: ReviewDto
@@ -118,7 +118,7 @@ export class ReviewController {
   }
 
   @Delete('/delete/:id')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(JwtAccessGuard)
   public async deleteReview(@Param('id') id: string): Promise<ServerResponse> {
     this.logger.log(`${this.deleteReview.name} was called in the controller.`);
     try {

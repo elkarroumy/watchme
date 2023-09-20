@@ -1,11 +1,11 @@
-import { Body, Controller, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from '../../core/services/auth/authentication.service';
 import { UserDto } from '../../core/entities/dtos/auth.dto';
 import { Request } from 'express';
 import { AppLogger } from '../../helpers/logger';
 import { ServerResponse } from '../../common/types';
-import { AccessTokenGuard } from '../../core/services/auth/guards/access-token.guard';
-import { RefreshTokenGuard } from '../../core/services/auth/guards/refresh-token.guard';
+import { JwtAccessGuard } from '../../common/guards/access-token.guard';
+import { JwtRefreshGuard } from '../../common/guards/refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -58,12 +58,12 @@ export class AuthController {
     }
   }
 
-  @Post('/refresh')
-  @UseGuards(RefreshTokenGuard)
+  @Get('/refresh')
+  @UseGuards(JwtRefreshGuard)
   public async updateTokens(@Req() req: Request): Promise<ServerResponse> {
     this.logger.log(`${this.updateTokens.name} was called in the controller.`);
     try {
-      const id = req.user['sub'];
+      const id = req.user['email'];
       const refreshToken = req.user['refreshToken'];
       const tokens = await this.authenticationService.refreshTokens(id, refreshToken);
       return {
@@ -84,7 +84,7 @@ export class AuthController {
   }
 
   @Post('/logout')
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(JwtAccessGuard)
   public async logout(@Req() req: Request): Promise<ServerResponse> {
     this.logger.log(`${this.logout.name} was called in the controller.`);
     try {

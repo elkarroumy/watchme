@@ -1,8 +1,9 @@
 import { REDIS } from '../constants';
 
 export const redisOptions = {
-  host: REDIS.HOST,
   port: REDIS.PORT,
+  host: REDIS.HOST,
   username: REDIS.USERNAME,
-  password: REDIS.PASSWORD
+  password: REDIS.PASSWORD,
+  db: REDIS.DATABASE
 };
