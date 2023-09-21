@@ -14,7 +14,23 @@ import { ReviewDto } from '../../core/entities/dtos/review.dto';
 import { AppLogger } from '../../helpers/logger';
 import { ServerResponse } from '../../common/types';
 import { JwtAccessGuard } from '../../common/guards/access-token.guard';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse
+} from '@nestjs/swagger';
+import {
+  responseSchema,
+  notFoundSchema,
+  unauthorizedSchema,
+  internalServerErrorSchema
+} from '../../common/documents/schemas';
 
 @ApiTags('Reviews')
 @Controller('reviews')
@@ -25,7 +41,14 @@ export class ReviewController {
   ) {}
 
   @Post('/create')
+  @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
+  @ApiBody({ type: ReviewDto })
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiOperation({ summary: 'Create review' })
+  @ApiUnauthorizedResponse(unauthorizedSchema)
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async createReview(@Body() body: ReviewDto): Promise<ServerResponse> {
     this.logger.log(`${this.createReview.name} was called in the controller.`);
     try {
@@ -56,6 +79,10 @@ export class ReviewController {
   }
 
   @Get('/get')
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiOperation({ summary: 'Show reviews' })
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async showReviews(): Promise<ServerResponse> {
     this.logger.log(`${this.showReviews.name} was called in the controller.`);
     try {
@@ -86,7 +113,15 @@ export class ReviewController {
   }
 
   @Put('/update/:id')
+  @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
+  @ApiBody({ type: ReviewDto })
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiParam({ type: 'string', name: 'id' })
+  @ApiOperation({ summary: 'Update review' })
+  @ApiUnauthorizedResponse(unauthorizedSchema)
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async updateReview(
     @Param('id') id: string,
     @Body() body: ReviewDto
@@ -120,7 +155,14 @@ export class ReviewController {
   }
 
   @Delete('/delete/:id')
+  @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiParam({ type: 'string', name: 'id' })
+  @ApiOperation({ summary: 'Delete review' })
+  @ApiUnauthorizedResponse(unauthorizedSchema)
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async deleteReview(@Param('id') id: string): Promise<ServerResponse> {
     this.logger.log(`${this.deleteReview.name} was called in the controller.`);
     try {

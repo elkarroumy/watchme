@@ -30,7 +30,7 @@ export class AuthenticationService {
     });
 
     const tokens = await this.tokenService.getTokens(createdUser.id, createdUser.email);
-    await this.tokenService.updateRefreshToken(createdUser.id, JSON.parse(tokens.refreshToken));
+    await this.tokenService.updateRefreshToken(createdUser.id, tokens.refreshToken);
     return tokens;
   }
 
@@ -51,8 +51,9 @@ export class AuthenticationService {
     if (verifyPassword) {
       throw new BadRequestException(EXCEPTION.PASSWORD_INCORRECT);
     }
+
     const tokens = await this.tokenService.getTokens(user.id, user.email);
-    await this.tokenService.updateRefreshToken(user.id, JSON.parse(tokens.refreshToken));
+    await this.tokenService.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
 
@@ -75,7 +76,7 @@ export class AuthenticationService {
     }
 
     const tokens = await this.tokenService.getTokens(user.id, user.email);
-    await this.tokenService.updateRefreshToken(user.id, JSON.parse(tokens.refreshToken));
+    await this.tokenService.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
 }

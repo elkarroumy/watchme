@@ -36,7 +36,7 @@ import {
   internalServerErrorSchema,
   notFoundSchema,
   unauthorizedSchema
-} from '../../common/documents';
+} from '../../common/documents/schemas';
 
 @ApiTags('Movies')
 @Controller('movies')
@@ -93,14 +93,14 @@ export class MovieController {
   }
 
   @Post('/watch-list/add')
-  @UseGuards(JwtAccessGuard)
   @ApiBearerAuth()
+  @UseGuards(JwtAccessGuard)
   @ApiBody({ type: MovieDto })
-  @ApiOperation({ summary: 'Add movie to watch list' })
   @ApiCreatedResponse(responseSchema)
   @ApiNotFoundResponse(notFoundSchema)
-  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   @ApiUnauthorizedResponse(unauthorizedSchema)
+  @ApiOperation({ summary: 'Add movie to watch list' })
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async addMovieToWatchList(@Body() body: MovieDto): Promise<ServerResponse> {
     this.logger.log(`${this.showMovies.name} was called in the controller.`);
     try {
@@ -135,6 +135,7 @@ export class MovieController {
   @ApiOperation({ summary: 'Watch list' })
   @ApiCreatedResponse(responseSchema)
   @ApiNotFoundResponse(notFoundSchema)
+  @ApiUnauthorizedResponse(unauthorizedSchema)
   @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async showWatchList(): Promise<ServerResponse> {
     this.logger.log(`${this.showWatchList.name} was called in the controller.`);
@@ -171,6 +172,7 @@ export class MovieController {
   @ApiOperation({ summary: 'Delete movie from watch list' })
   @ApiCreatedResponse(responseSchema)
   @ApiNotFoundResponse(notFoundSchema)
+  @ApiUnauthorizedResponse(unauthorizedSchema)
   @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async deleteMovieFromWatchList(@Param('id') id: string): Promise<ServerResponse> {
     this.logger.log(`${this.deleteMovieFromWatchList.name} was called in the controller.`);

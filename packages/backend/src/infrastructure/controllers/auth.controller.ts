@@ -6,7 +6,22 @@ import { AppLogger } from '../../helpers/logger';
 import { ServerResponse } from '../../common/types';
 import { JwtAccessGuard } from '../../common/guards/access-token.guard';
 import { JwtRefreshGuard } from '../../common/guards/refresh-token.guard';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse
+} from '@nestjs/swagger';
+import {
+  responseSchema,
+  notFoundSchema,
+  internalServerErrorSchema,
+  unauthorizedSchema
+} from '../../common/documents/schemas';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -17,6 +32,11 @@ export class AuthController {
   ) {}
 
   @Post('/signup')
+  @ApiBody({ type: UserDto })
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiOperation({ summary: 'Register user' })
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async signUp(@Body() body: UserDto): Promise<ServerResponse> {
     this.logger.log(`${this.signUp.name} was called in the controller.`);
     try {
@@ -39,6 +59,11 @@ export class AuthController {
   }
 
   @Post('/signin')
+  @ApiBody({ type: UserDto })
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiOperation({ summary: 'Login user' })
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async signIn(@Body() body: UserDto): Promise<ServerResponse> {
     this.logger.log(`${this.signIn.name} was called in the controller.`);
     try {
@@ -61,7 +86,13 @@ export class AuthController {
   }
 
   @Get('/refresh')
+  @ApiBearerAuth()
   @UseGuards(JwtRefreshGuard)
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiUnauthorizedResponse(unauthorizedSchema)
+  @ApiOperation({ summary: "Update user's tokens" })
+  @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async updateTokens(@Req() req: Request): Promise<ServerResponse> {
     this.logger.log(`${this.updateTokens.name} was called in the controller.`);
     try {
@@ -86,7 +117,12 @@ export class AuthController {
   }
 
   @Post('/logout')
+  @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
+  @ApiCreatedResponse(responseSchema)
+  @ApiNotFoundResponse(notFoundSchema)
+  @ApiOperation({ summary: 'User logout' })
+  @ApiUnauthorizedResponse(unauthorizedSchema)
   public async logout(@Req() req: Request): Promise<ServerResponse> {
     this.logger.log(`${this.logout.name} was called in the controller.`);
     try {

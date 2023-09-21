@@ -34,7 +34,6 @@ export const unauthorizedSchema = {
   }
 };
 
-
 export const responseSchema = {
   type: ServerResponse
 };

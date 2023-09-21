@@ -24,31 +24,24 @@ export class TokenService {
 
   public async getTokens(id: string, email: string): Promise<Tokens> {
     this.logger.log(`${this.getTokens.name} was called in the service.`);
+
+    const payload = {
+      sub: id,
+      email
+    };
     const [access, refresh] = await Promise.all([
-      this.jwtService.signAsync(
-        {
-          sub: id,
-          email
-        },
-        {
-          secret: JWT.ACCESS_SECRET,
-          expiresIn: '15m'
-        }
-      ),
-      this.jwtService.signAsync(
-        {
-          sub: id,
-          email
-        },
-        {
-          secret: JWT.REFRESH_SECRET,
-          expiresIn: '7d'
-        }
-      )
+      this.jwtService.signAsync(payload, {
+        secret: JWT.ACCESS_SECRET,
+        expiresIn: '15m'
+      }),
+      this.jwtService.signAsync(payload, {
+        secret: JWT.REFRESH_SECRET,
+        expiresIn: '7d'
+      })
     ]);
 
-    await this.redisRepository.set(REDIS.ACCESS, JSON.stringify(access), REDIS.EXPIRE);
-    await this.redisRepository.set(REDIS.REFRESH, JSON.stringify(refresh), REDIS.EXPIRE);
+    await this.redisRepository.set(REDIS.ACCESS, access, REDIS.EXPIRE);
+    await this.redisRepository.set(REDIS.REFRESH, refresh, REDIS.EXPIRE);
 
     const accessToken = await this.redisRepository.get(REDIS.ACCESS);
     const refreshToken = await this.redisRepository.get(REDIS.REFRESH);
