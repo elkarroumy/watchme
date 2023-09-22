@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './infrastructure/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { APP, CORS } from './common/constants';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,8 @@ async function bootstrap() {
     methods: [CORS.METHODS],
     credentials: true
   });
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Watchme')

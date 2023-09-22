@@ -5,26 +5,21 @@ import { JwtService } from '@nestjs/jwt';
 import { JWT, REDIS } from '../../../common/constants';
 import RedisRepository from '../../../infrastructure/database/repositories/redis.repository';
 import { Tokens } from '../../../common/types';
-import { AppLogger } from '../../../helpers/logger';
 
 @Injectable()
 export class TokenService {
   public constructor(
     private readonly authRepository: AuthRepository,
     private readonly redisRepository: RedisRepository,
-    private readonly jwtService: JwtService,
-    private readonly logger: AppLogger
+    private readonly jwtService: JwtService
   ) {}
 
   public async updateRefreshToken(id: string, token: string): Promise<void> {
-    this.logger.log(`${this.updateRefreshToken.name} was called in the service.`);
     const hashedRefreshToken = await encrypt(token);
     await this.authRepository.updateToken(id, hashedRefreshToken);
   }
 
   public async getTokens(id: string, email: string): Promise<Tokens> {
-    this.logger.log(`${this.getTokens.name} was called in the service.`);
-
     const payload = {
       sub: id,
       email

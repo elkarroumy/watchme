@@ -3,80 +3,67 @@ import { MovieIntegration } from '../../integrations/movie.integration';
 import { MovieDto, ShowMovieQueriesDto, SearchMovieQueriesDto } from '../entities/dtos/movie.dto';
 import MovieRepository from '../../infrastructure/database/repositories/movie.repository';
 import RedisRepository from '../../infrastructure/database/repositories/redis.repository';
-import { Injectable } from '@nestjs/common';
-import { AppLogger } from '../../helpers/logger';
+import { HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MovieService {
   public constructor(
     private readonly movieRepository: MovieRepository,
     private readonly redisRepository: RedisRepository,
-    private readonly movieIntegration: MovieIntegration,
-    private readonly logger: AppLogger
+    private readonly movieIntegration: MovieIntegration
   ) {}
 
   public async showMovies(queries: ShowMovieQueriesDto) {
-    this.logger.log(`${this.showMovies.name} was called in the service.`);
     const { body, statusCode } = await this.movieIntegration.getMovies(queries);
 
     return {
       status: statusCode,
-      data: body,
-      error: null
+      data: body
     };
   }
 
   public async addMovieToWatchList(body: MovieDto) {
-    this.logger.log(`${this.addMovieToWatchList.name} was called in the service.`);
     const movie = await this.movieRepository.add(body);
     if (movie) {
       this.redisRepository.set(TMDB.TYPE.MOVIE, JSON.stringify(body), REDIS.EXPIRE);
     }
     return {
-      status: 201,
-      data: movie,
-      error: null
+      status: HttpStatus.CREATED,
+      data: movie
     };
   }
 
   public async showWatchList() {
-    this.logger.log(`${this.showWatchList.name} was called in the service.`);
     const cache = await this.redisRepository.get(TMDB.TYPE.MOVIE);
     if (cache) {
       return {
-        status: 200,
-        data: JSON.parse(cache),
-        error: null
+        status: HttpStatus.OK,
+        data: JSON.parse(cache)
       };
     }
     const watchList = await this.movieRepository.find();
 
     return {
-      status: 200,
-      data: watchList,
-      error: null
+      status: HttpStatus.OK,
+      data: watchList
     };
   }
 
   public async deleteMovieFromWatchList(id: string) {
-    this.logger.log(`${this.deleteMovieFromWatchList.name} was called in the service.`);
     const deletedMovie = await this.movieRepository.delete(id);
 
     return {
-      status: 200,
-      data: deletedMovie.id,
-      error: null
+      status: HttpStatus.OK,
+      data: deletedMovie.id
     };
   }
 
   public async searchMovies(queries: SearchMovieQueriesDto) {
-    this.logger.log(`${this.searchMovies.name} was called in the service.`);
     const { body, statusCode } = await this.movieIntegration.searchMovies(queries);
 
     return {
       status: statusCode,
-      data: body,
-      error: null
+      data: body
     };
   }
 }

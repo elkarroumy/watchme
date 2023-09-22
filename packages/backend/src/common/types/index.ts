@@ -17,12 +17,6 @@ export class ServerResponse {
 
   @ApiProperty({ example: { id: 1, title: 'title', description: 'description' } })
   data: any;
-
-  @ApiProperty({
-    description: 'An object containing error details',
-    example: { reason: 'This is a custom error message' }
-  })
-  error: { [key: string]: any };
 }
 
 export interface PostgresOptions {

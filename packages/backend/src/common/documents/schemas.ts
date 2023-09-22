@@ -1,13 +1,13 @@
-import { ServerResponse } from "../types";
+import { ServerResponse } from '../types';
+import { HttpStatus } from '@nestjs/common';
 
 export const internalServerErrorSchema = {
   schema: {
     type: 'object',
     properties: {
       message: { type: 'string', example: 'Something went wrong, please, try again' },
-      status: { type: 'number', example: 500 },
-      data: { type: 'null', example: null },
-      error: { type: 'string', example: 'Internal server error' }
+      status: { type: 'number', example: HttpStatus.INTERNAL_SERVER_ERROR },
+      data: { type: 'null', example: null }
     }
   }
 };
@@ -17,9 +17,8 @@ export const notFoundSchema = {
     type: 'object',
     properties: {
       message: { type: 'string', example: 'Movie not found' },
-      status: { type: 'number', example: 404 },
-      data: { type: 'null', example: null },
-      error: { type: 'null', example: null }
+      status: { type: 'number', example: HttpStatus.NOT_FOUND },
+      data: { type: 'null', example: null }
     }
   }
 };
@@ -28,8 +27,9 @@ export const unauthorizedSchema = {
   schema: {
     type: 'object',
     properties: {
+      status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       message: { type: 'string', example: 'Unathorized' },
-      statusCode: { type: 'number', example: 401 }
+      data: null
     }
   }
 };
