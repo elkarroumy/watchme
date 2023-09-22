@@ -30,10 +30,18 @@ export interface PostgresOptions {
 export type JwtPayload = {
   sub: string;
   email: string;
-  refreshToken: string;
 };
 
 export type Tokens = {
   accessToken: string;
   refreshToken: string;
 };
+
+export interface LogsDto {
+  level: string;
+  timestamp: string;
+  message: string;
+  method: string;
+  path: string;
+  userAgent: string;
+}

@@ -47,3 +47,13 @@ model User {
   movie        Movie?  @relation(fields: [movieId], references: [id])
   movieId      String?
 }
+
+model Logs {
+  id        String   @id @default(uuid())
+  level     String
+  timestamp String
+  message   String
+  method    String
+  path      String
+  userAgent String
+}

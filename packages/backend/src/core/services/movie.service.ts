@@ -41,7 +41,14 @@ export class MovieService {
         data: JSON.parse(cache)
       };
     }
+
     const watchList = await this.movieRepository.find();
+    if (!watchList) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        data: null
+      };
+    }
 
     return {
       status: HttpStatus.OK,

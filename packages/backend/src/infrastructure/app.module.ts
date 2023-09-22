@@ -5,11 +5,13 @@ import { MovieModule } from '../core/modules/movie.module';
 import { ReviewModule } from '../core/modules/review.module';
 import { LoggerMiddleware } from '../common/middleware/logger.middleware';
 import { AppLogger } from '../helpers/logger';
+import LogsRepository from './database/repositories/logs.repositories';
+import { PrismaClient } from '@prisma/client';
 
 @Module({
   imports: [JwtModule.register({}), AuthModule, MovieModule, ReviewModule],
   controllers: [],
-  providers: [AppLogger]
+  providers: [AppLogger, LogsRepository, PrismaClient]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

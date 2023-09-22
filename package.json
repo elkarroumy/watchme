@@ -7,9 +7,12 @@
     "start": "npx lerna run start",
     "start:dev": "npx lerna run start:dev"
   },
-	"dependencies": {
-		"lerna": "^7.2.0"
-	},
+  "dependencies": {
+    "lerna": "^7.2.0"
+  },
   "keywords": [],
-  "license": "ISC"
+  "license": "ISC",
+  "prisma": {
+    "schema": "packages/backend/src/infrastructure/database/postgres/schema.prisma"
+  }
 }

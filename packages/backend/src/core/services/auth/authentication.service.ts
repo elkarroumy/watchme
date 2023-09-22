@@ -69,7 +69,7 @@ export class AuthenticationService {
     }
 
     const tokens = await this.tokenService.getTokens(user.id, user.email);
-    await this.tokenService.updateRefreshToken(user.id, JSON.parse(tokens.refreshToken));
+    await this.tokenService.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
 }

@@ -29,7 +29,18 @@ export const unauthorizedSchema = {
     properties: {
       status: { type: 'number', example: HttpStatus.UNAUTHORIZED },
       message: { type: 'string', example: 'Unathorized' },
-      data: null
+      data: { type: 'null', example: null }
+    }
+  }
+};
+
+export const forbiddenSchema = {
+  schema: {
+    type: 'object',
+    properties: {
+      status: { type: 'number', example: HttpStatus.FORBIDDEN },
+      message: { type: 'string', example: 'Access denied' },
+      data: { type: 'null', example: null }
     }
   }
 };

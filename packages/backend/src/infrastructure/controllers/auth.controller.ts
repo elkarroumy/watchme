@@ -18,6 +18,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOperation,
@@ -28,7 +29,8 @@ import {
   responseSchema,
   notFoundSchema,
   internalServerErrorSchema,
-  unauthorizedSchema
+  unauthorizedSchema,
+  forbiddenSchema
 } from '../../common/documents/schemas';
 
 @ApiTags('Auth')
@@ -72,6 +74,7 @@ export class AuthController {
   @ApiCreatedResponse(responseSchema)
   @ApiNotFoundResponse(notFoundSchema)
   @ApiUnauthorizedResponse(unauthorizedSchema)
+  @ApiForbiddenResponse(forbiddenSchema)
   @ApiOperation({ summary: "Update user's tokens" })
   @ApiInternalServerErrorResponse(internalServerErrorSchema)
   public async updateTokens(@Req() req: Request): Promise<ServerResponse> {
