@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { MovieDto } from '../../../core/entities/dtos/movie.dto';
-import { Movie, MovieMethods } from '../../../core/entities/movie.entity';
+import { MovieDto } from '../../../core/movie/entities/dtos/movie.dto';
+import { Movie, MovieMethods } from '../../../core/movie/entities/movie.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

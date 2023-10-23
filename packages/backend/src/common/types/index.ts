@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Movie } from '../../core/entities/movie.entity';
 
 export interface MovieList {
   now_playing: string;

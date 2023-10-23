@@ -3,6 +3,7 @@ import { ReviewDto } from './dtos/review.dto';
 export interface Review {
   id: string;
   name: string;
+  date: Date;
   description: string;
   rating: string;
 };

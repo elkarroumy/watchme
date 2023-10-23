@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MovieList } from '../../../common/types';
+import { MovieList } from '../../../../common/types';
 
 export class MovieDto {
   @ApiProperty()

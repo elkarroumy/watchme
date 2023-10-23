@@ -8,7 +8,7 @@
     "start:dev": "npx lerna run start:dev"
   },
   "dependencies": {
-    "lerna": "^7.2.0"
+    "lerna": "^7.4.1"
   },
   "keywords": [],
   "license": "ISC",

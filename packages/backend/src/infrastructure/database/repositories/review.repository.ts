@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { ReviewDto } from '../../../core/entities/dtos/review.dto';
-import { Review, ReviewMethods } from '../../../core/entities/review.entity';
+import { ReviewDto } from '../../../core/review/entities/dtos/review.dto';
+import { Review, ReviewMethods } from '../../../core/review/entities/review.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -24,5 +24,11 @@ export default class ReviewRepository implements ReviewMethods {
 
   public async delete(id: string): Promise<Review> {
     return await this.prisma.review.delete({ where: { id } });
+  }
+
+  public async findReviewComment(id: string) {
+    return await this.prisma.reviewComment.findUnique({
+      where: { id }
+    });
   }
 }

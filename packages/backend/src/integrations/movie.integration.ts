@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { TMDB } from '../common/constants';
-import { ShowMovieQueriesDto, SearchMovieQueriesDto } from '../core/entities/dtos/movie.dto';
+import { ShowMovieQueriesDto, SearchMovieQueriesDto } from '../core/movie/entities/dtos/movie.dto';
 import { request } from 'undici';
 
 @Injectable()
-export class MovieIntegration {
+export class TheMovieDatabaseIntegration {
   public async getMovies({ lists, language, page }: ShowMovieQueriesDto) {
     const { body, statusCode } = await request(
       `${TMDB.URL}/${TMDB.TYPE.MOVIE}/${lists}?language=${language}&page=${page}`,

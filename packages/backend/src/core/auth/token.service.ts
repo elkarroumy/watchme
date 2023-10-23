@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import AuthRepository from '../../../infrastructure/database/repositories/auth.repository';
-import { encrypt } from '../../../helpers/crypto';
+import AuthRepository from '../../infrastructure/database/repositories/auth.repository';
+import { encrypt } from '../../helpers/crypto';
 import { JwtService } from '@nestjs/jwt';
-import { JWT, REDIS } from '../../../common/constants';
-import RedisRepository from '../../../infrastructure/database/repositories/redis.repository';
-import { Tokens } from '../../../common/types';
+import { JWT, REDIS } from '../../common/constants';
+import RedisRepository from '../../infrastructure/database/repositories/redis.repository';
+import { Tokens } from '../../common/types';
 
 @Injectable()
 export class TokenService {

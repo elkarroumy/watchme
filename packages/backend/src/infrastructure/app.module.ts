@@ -1,9 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from '../core/modules/auth.module';
-import { MovieModule } from '../core/modules/movie.module';
-import { ReviewModule } from '../core/modules/review.module';
-import { LoggerMiddleware } from '../common/middleware/logger.middleware';
+import { AuthModule } from '../core/auth/auth.module';
+import { MovieModule } from '../core/movie/movie.module';
+import { ReviewModule } from '../core/review/review.module';
+import { LoggerMiddleware } from '../common/middlewares/logger.middleware';
 import { AppLogger } from '../helpers/logger';
 import LogsRepository from './database/repositories/logs.repositories';
 import { PrismaClient } from '@prisma/client';

@@ -1,11 +1,11 @@
 import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
-import { encrypt, decrypt } from '../../../helpers/crypto';
-import AuthRepository from '../../../infrastructure/database/repositories/auth.repository';
-import { UserDto } from '../../entities/dtos/auth.dto';
-import { EXCEPTION } from '../../../common/constants';
+import { encrypt, decrypt } from '../../helpers/crypto';
+import AuthRepository from '../../infrastructure/database/repositories/auth.repository';
+import { UserDto } from './entities/dtos/auth.dto';
+import { EXCEPTION } from '../../common/constants';
 import { TokenService } from './token.service';
-import { Tokens } from '../../../common/types';
-import { User } from '../../entities/user.entity';
+import { Tokens } from '../../common/types';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class AuthenticationService {

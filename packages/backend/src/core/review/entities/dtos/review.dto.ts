@@ -8,5 +8,8 @@ export class ReviewDto {
   description: string;
 
   @ApiProperty()
+  date: Date;
+
+  @ApiProperty()
   rating: string;
 }

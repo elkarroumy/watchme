@@ -1,6 +1,6 @@
 import { REDIS, TMDB } from '../../common/constants';
-import { MovieIntegration } from '../../integrations/movie.integration';
-import { MovieDto, ShowMovieQueriesDto, SearchMovieQueriesDto } from '../entities/dtos/movie.dto';
+import { TheMovieDatabaseIntegration } from '../../integrations/movie.integration';
+import { MovieDto, ShowMovieQueriesDto, SearchMovieQueriesDto } from './entities/dtos/movie.dto';
 import MovieRepository from '../../infrastructure/database/repositories/movie.repository';
 import RedisRepository from '../../infrastructure/database/repositories/redis.repository';
 import { HttpStatus, Injectable } from '@nestjs/common';
@@ -10,11 +10,11 @@ export class MovieService {
   public constructor(
     private readonly movieRepository: MovieRepository,
     private readonly redisRepository: RedisRepository,
-    private readonly movieIntegration: MovieIntegration
+    private readonly theMovieDatabaseIntegration: TheMovieDatabaseIntegration
   ) {}
 
   public async showMovies(queries: ShowMovieQueriesDto) {
-    const { body, statusCode } = await this.movieIntegration.getMovies(queries);
+    const { body, statusCode } = await this.theMovieDatabaseIntegration.getMovies(queries);
 
     return {
       status: statusCode,
@@ -66,7 +66,7 @@ export class MovieService {
   }
 
   public async searchMovies(queries: SearchMovieQueriesDto) {
-    const { body, statusCode } = await this.movieIntegration.searchMovies(queries);
+    const { body, statusCode } = await this.theMovieDatabaseIntegration.searchMovies(queries);
 
     return {
       status: statusCode,

@@ -27,12 +27,23 @@ model Movie {
 }
 
 model Review {
-  id          String  @id @default(uuid())
+  id          String          @id @default(uuid())
   name        String
   description String
   rating      String
+  date        DateTime
+  commentId   ReviewComment[]
   movieId     Movie[]
   userId      User[]
+}
+
+model ReviewComment {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  date        DateTime
+  Review      Review?  @relation(fields: [reviewId], references: [id])
+  reviewId    String?
 }
 
 model User {
@@ -49,7 +60,7 @@ model User {
 }
 
 model Logs {
-  id        String   @id @default(uuid())
+  id        String @id @default(uuid())
   level     String
   timestamp String
   message   String

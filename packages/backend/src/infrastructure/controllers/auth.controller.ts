@@ -8,8 +8,8 @@ import {
   UseFilters,
   UseGuards
 } from '@nestjs/common';
-import { AuthenticationService } from '../../core/services/auth/authentication.service';
-import { UserDto } from '../../core/entities/dtos/auth.dto';
+import { AuthenticationService } from '../../core/auth/authentication.service';
+import { UserDto } from '../../core/auth/entities/dtos/auth.dto';
 import { Request } from 'express';
 import { ServerResponse } from '../../common/types';
 import { JwtAccessGuard } from '../../common/guards/access-token.guard';

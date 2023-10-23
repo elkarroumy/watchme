@@ -1,21 +1,11 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  Query,
-  UseGuards
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ServerResponse } from '../../common/types';
 import {
   MovieDto,
   SearchMovieQueriesDto,
   ShowMovieQueriesDto
-} from '../../core/entities/dtos/movie.dto';
-import { MovieService } from '../../core/services/movie.service';
+} from '../../core/movie/entities/dtos/movie.dto';
+import { MovieService } from '../../core/movie/movie.service';
 import { JwtAccessGuard } from '../../common/guards/access-token.guard';
 import {
   ApiBearerAuth,
@@ -75,7 +65,7 @@ export class MovieController {
     };
   }
 
-  @Post('/watch-list/add')
+  @Post('/watch-list')
   @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
   @ApiBody({ type: MovieDto })
@@ -124,7 +114,7 @@ export class MovieController {
     };
   }
 
-  @Delete('/watch-list/delete')
+  @Delete('/watch-list/:id')
   @UseGuards(JwtAccessGuard)
   @ApiBearerAuth()
   @ApiParam({ type: 'string', name: 'id' })

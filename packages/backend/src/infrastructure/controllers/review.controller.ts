@@ -9,8 +9,8 @@ import {
   Put,
   UseGuards
 } from '@nestjs/common';
-import { ReviewService } from '../../core/services/review.service';
-import { ReviewDto } from '../../core/entities/dtos/review.dto';
+import { ReviewService } from '../../core/review/review.service';
+import { ReviewDto } from '../../core/review/entities/dtos/review.dto';
 import { ServerResponse } from '../../common/types';
 import { JwtAccessGuard } from '../../common/guards/access-token.guard';
 import {
@@ -36,7 +36,7 @@ import {
 export class ReviewController {
   public constructor(private readonly reviewService: ReviewService) {}
 
-  @Post('/create')
+  @Post()
   @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
   @ApiBody({ type: ReviewDto })
@@ -61,7 +61,7 @@ export class ReviewController {
     };
   }
 
-  @Get('/get')
+  @Get()
   @ApiCreatedResponse(responseSchema)
   @ApiNotFoundResponse(notFoundSchema)
   @ApiOperation({ summary: 'Show reviews' })
@@ -82,7 +82,7 @@ export class ReviewController {
     };
   }
 
-  @Put('/update/:id')
+  @Put('/:id')
   @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
   @ApiBody({ type: ReviewDto })
@@ -111,7 +111,7 @@ export class ReviewController {
     };
   }
 
-  @Delete('/delete/:id')
+  @Delete('/:id')
   @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
   @ApiCreatedResponse(responseSchema)
